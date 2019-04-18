@@ -1,0 +1,109 @@
+/*.workTable tr:hover td {
+    background: #a0a0a0;
+}*/
+.cellTime, .tableNormal tr:hover td, .child-table-approval td {
+    &.is-change {
+        background: #ce6e6e;
+        .item01 {
+            color: #fff;
+        }
+        .item02 {
+            color: #000;
+        }
+    }
+    &.not-change {
+        background: #b9d6b9;
+    }
+    &.is-late, &.is-early {
+        background: #6c610e;
+        color: #fff;
+    }
+}
+.cellType, .tableNormal tr:hover td {
+    &.warning {
+        background: #ce9425;
+    }
+}
+.miss-approval, .tableNormal tr.miss-approval:hover {
+    .cellMemo {
+        background: #ce6e6e;
+        div:first-child {
+            color: #fff;
+        }
+        .red {
+            color: #ffff00;
+        }
+    }
+}
+.is-approval, .tableNormal tr.is-approval:hover {
+    .cellMemo {
+        background: #b9d6b9;
+    }
+}
+.time-full, .tableNormal tr:hover td.time-full {
+    background: #b9d6b9;
+}
+td.time-not-full, .tableNormal tr:hover td.time-not-full {
+    background: #ce6e6e;
+    color: #fff;
+}
+.cellTimeNum {
+    position: relative;
+    .buttons {
+        position: absolute;
+        top: 3px;
+        width: 65px;
+        left: 5px;
+        letter-spacing: normal;
+        a {
+            letter-spacing: normal;
+            margin: 0;
+        }
+    }
+}
+.approval-all {
+    background: #ef7709;
+    padding: 0 15px;
+    top: 0;
+    height: 30px;
+    line-height: 30px;
+    color: #fff;
+    &.fixed {
+        position: fixed;
+        left: 23px;
+    }
+}
+.child-table-approval {
+    width: 100%;
+    .btn-group {
+        .btn {
+            margin: 0;
+            &.btnApproval {
+                margin-bottom: 5px;
+            }
+        }
+    }
+    .time-not-full {
+        white-space: nowrap !important;
+    }
+    .time-check {
+        width: 52px;
+    }
+    .day-type {
+        width: 85px;
+    }
+}
+.tableNormal tr:hover td {
+    .dayRed td {
+        color: #d42f61 !important;
+        background: #fbeef2 !important;
+    }
+    .dayBlue td {
+        color: #006a96 !important;
+        background: #ebf5f9 !important;
+    }
+    .dayGreen td {
+        color: #408135 !important;
+        background: #edf9eb !important;
+    }
+}
