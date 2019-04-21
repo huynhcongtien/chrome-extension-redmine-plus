@@ -10,12 +10,12 @@
     "default_locale": "en",
     "background": {
         "scripts": [
-            "assets/dist/js/background.min.js"
+            "assets/src/js/chrome-reload.js"
         ]
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
-        "https://f.ieyasu.co/*",
+        "https://redmine.lampart-vn.com/*",
         "alarms",
         "notifications",
         "background",
@@ -25,10 +25,11 @@
     "content_scripts": [
         {
             "matches": [
-                "*://f.ieyasu.co/*"
+                "*://redmine.lampart-vn.com/*"
             ],
             "js": [
-                "assets/dist/js/main.min.js"
+                "assets/dist/js/main.min.js",
+                "assets/src/js/content-script.js"
             ],
             "css": [
                 "assets/dist/css/main.min.css"

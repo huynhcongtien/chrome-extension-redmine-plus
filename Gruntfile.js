@@ -16,6 +16,8 @@ module.exports = function (grunt) {
         // package.json
         pkg: appConfig.pkg,
 
+        stack: false,
+
         // project settings
         theme: appConfig
     });
@@ -36,25 +38,25 @@ module.exports = function (grunt) {
         'jshint'
     ]);
 
-    grunt.registerTask('build', [
+    grunt.registerTask('pro', [
+        'update_manifest:0',
+        'prompt',
         'clean',
         'copy',
         'sass',
         'cssmin',
-        'uglify'
-    ]);
-
-    grunt.registerTask('pro', [
-        'update_manifest:0',
-        'prompt',
-        'build',
+        'uglify:pro',
         'compress',
         'notify:watch_compress'
     ]);
 
     grunt.registerTask('dev', [
         'update_manifest:1',
-        'build',
+        'clean',
+        'copy',
+        'sass',
+        'cssmin',
+        'uglify:dev',
         'notify:watch_dev',
         'watch'
     ]);
@@ -67,8 +69,9 @@ module.exports = function (grunt) {
         var manifestFile   = 'app/manifest.json',
             manifestObject = grunt.file.readJSON(manifestFile);//get file as json object
 
-        manifestObject.background.scripts = [
-            'assets/dist/js/background.min.js'
+        manifestObject.background            = {};
+        manifestObject.content_scripts[0].js = [
+            'assets/dist/js/main.min.js'
         ];
 
         if (typeof is_not_production === 'undefined') {
@@ -78,7 +81,10 @@ module.exports = function (grunt) {
         is_not_production = parseInt(is_not_production);
 
         if (is_not_production) {
-            manifestObject.background.scripts.push('assets/src/js/chrome-reload.js');
+            manifestObject.background = {
+                scripts: ['assets/src/js/chrome-reload.js']
+            };
+            manifestObject.content_scripts[0].js.push('assets/src/js/content-script.js');
         }
 
         grunt.file.write(manifestFile, JSON.stringify(manifestObject, null, 4));//serialize it back to file

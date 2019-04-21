@@ -25,8 +25,7 @@ module.exports = function () {
                     dest   : '<%= theme.build %>/js/',
                     src    : [
                         'bootstrap/dist/js/bootstrap.min.js',
-                        'jquery/dist/jquery.js',
-                        'moment/min/moment.min.js',
+                        'jquery/dist/jquery.min.js',
                         'vue/dist/vue.min.js',
                         'notifyjs-browser/dist/notify.js'
                     ]

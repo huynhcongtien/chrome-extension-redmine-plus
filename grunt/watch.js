@@ -7,7 +7,7 @@ module.exports = function () {
 
     return {
         options      : {
-            livereload: 35729
+            livereload: 35728
         },
         css_main     : {
             files: [
@@ -77,7 +77,6 @@ module.exports = function () {
                 '<%= theme.src %>/js/content-script.js'
             ],
             tasks: [
-                'uglify:main',
                 'notify:watch_js'
             ]
         },
