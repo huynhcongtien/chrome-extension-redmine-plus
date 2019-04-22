@@ -6,8 +6,6 @@ $(function () {
     var journalList = $('#history .journal'),
         journalNumber = journalList.length
     ;
-    
-    console.log(13113);
 
     journalList.each(function () {
         var journal = $(this);
@@ -15,7 +13,9 @@ $(function () {
 
     var notePlus = '' +
         '<div class="note-plus">' +
-        '   <span class="up"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>' +
+        '   <span class="direction up"><i class="fa fa-chevron-up" aria-hidden="true"></i></span>' +
+        '   <input type="text" class="note-number" />' +
+        '   <span class="direction down"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>' +
         '</div>'
     ;
 
