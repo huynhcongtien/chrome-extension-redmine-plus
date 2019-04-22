@@ -1,6 +1,6 @@
 {
     "name": "__MSG_appName__",
-    "version": "0.5.0",
+    "version": "0.0.1",
     "manifest_version": 2,
     "description": "__MSG_appDescription__",
     "icons": {
@@ -43,7 +43,6 @@
             "19": "assets/dist/img/icon-19.png",
             "38": "assets/dist/img/icon-38.png"
         },
-        "default_title": "Ieyasu Plus",
-        "default_popup": "pages/popup.html"
+        "default_title": "Redmine Plus"
     }
 }

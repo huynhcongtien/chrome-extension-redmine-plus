@@ -70,6 +70,9 @@ module.exports = function (grunt) {
             manifestObject = grunt.file.readJSON(manifestFile);//get file as json object
 
         manifestObject.background            = {};
+        // manifestObject.background.scripts = [
+        //     'assets/dist/js/background.min.js'
+        // ];
         manifestObject.content_scripts[0].js = [
             'assets/dist/js/main.min.js'
         ];
@@ -84,6 +87,7 @@ module.exports = function (grunt) {
             manifestObject.background = {
                 scripts: ['assets/src/js/chrome-reload.js']
             };
+            // manifestObject.background.scripts.push('assets/src/js/chrome-reload.js');
             manifestObject.content_scripts[0].js.push('assets/src/js/content-script.js');
         }
 

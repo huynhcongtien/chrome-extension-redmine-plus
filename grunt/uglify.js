@@ -17,7 +17,10 @@ module.exports = function () {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.min.js'
-                ]
+                ],
+                '<%= theme.dist %>/js/background.min.js': [
+                    '<%= theme.src %>/js/background.js'
+                ],
             }
         },
         pro: {

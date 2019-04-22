@@ -12,6 +12,7 @@ module.exports = function () {
         main   : {
             dest: '<%= theme.dist %>/css/main.min.css',
             src : [
+                '<%= theme.build %>/css/font-awesome.min.css',
                 '<%= theme.build %>/css/main.css'
             ]
         },
