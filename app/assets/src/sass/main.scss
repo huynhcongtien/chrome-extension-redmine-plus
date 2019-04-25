@@ -3,13 +3,23 @@
     right: 0;
     top: 100px;
     z-index: 9999;
-    //background: #fff;
+    opacity: .5;
+    transition: opacity 1s linear;
+    &:hover {
+        transition: visibility 0s .2s, opacity .2s linear;
+        opacity: 1;
+    }
+    &.on-focus {
+        opacity: 1;
+    }
+
     .direction {
         width: 100%;
         height: 20px;
         display: block;
         position: relative;
         cursor: pointer;
+
         .fa {
             font-size: 20px;
             width: 100%;
@@ -22,8 +32,17 @@
             }
         }
     }
+
     .note-number {
         width: 30px;
         text-align: center;
+    }
+
+    .rotate {
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotate(90deg);
     }
 }
