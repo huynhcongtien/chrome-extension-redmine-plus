@@ -8,7 +8,7 @@ module.exports = function () {
     return {
         options : {
             compress: {
-                warnings: false
+                drop_console: true
             },
             report  : 'min',
             mangle  : true
@@ -16,7 +16,8 @@ module.exports = function () {
         dev: {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
-                    '<%= theme.build %>/js/jquery.min.js'
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/jquery-ui.min.js'
                 ],
                 '<%= theme.dist %>/js/background.min.js': [
                     '<%= theme.src %>/js/background.js'
@@ -27,6 +28,7 @@ module.exports = function () {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.build %>/js/jquery-ui.min.js',
                     '<%= theme.src %>/js/content-script.js'
                 ]
             }

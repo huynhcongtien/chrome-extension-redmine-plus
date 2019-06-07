@@ -5,9 +5,15 @@
     z-index: 9999;
     opacity: .5;
     transition: opacity 1s linear;
-    &:hover {
+    width: 34px;
+    &:hover, &:active {
         transition: visibility 0s .2s, opacity .2s linear;
         opacity: 1;
+
+        .move {
+            display: block;
+            opacity: 1;
+        }
     }
     &.on-focus {
         opacity: 1;
@@ -44,5 +50,16 @@
         -o-transform: rotate(90deg);
         -ms-transform: rotate(90deg);
         transform: rotate(90deg);
+    }
+
+    .move {
+        position: absolute;
+        left: -21px;
+        top: 22px;
+        padding: 0 5px 0 0;
+        font-size: 16px;
+        display: none;
+        transition: opacity 1s ease-out;
+        opacity: 0;
     }
 }

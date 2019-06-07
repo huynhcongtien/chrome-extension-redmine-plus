@@ -27,7 +27,8 @@ module.exports = function () {
                         'bootstrap/dist/js/bootstrap.min.js',
                         'jquery/dist/jquery.min.js',
                         'vue/dist/vue.min.js',
-                        'notifyjs-browser/dist/notify.js'
+                        'notifyjs-browser/dist/notify.js',
+                        'jquery-ui-dist/jquery-ui.min.js'
                     ]
                 },
                 {

@@ -14,8 +14,12 @@ $(function () {
             noteNumber    = '';
 
         if (currentUrls[1]) {
-            var noteText = currentUrls[1].split('-');
-            noteNumber   = noteText[1];
+            var noteText = currentUrls[1].split('-'),
+                type     = noteText[0];
+
+            if (type === 'note') {
+                noteNumber = noteText[1];
+            }
         }
 
         var notePlus = '' +
@@ -25,6 +29,7 @@ $(function () {
             '   <input type="text" class="note-number" value="' + noteNumber + '" />' +
             '   <span class="direction down"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>' +
             // '   <span class="direction end"><i class="fa fa-step-forward rotate" aria-hidden="true"></i></span>' +
+            '   <span class="move"><i class="fa fa-arrows" aria-hidden="true"></i></span>' +
             '</div>'
         ;
 
@@ -34,7 +39,21 @@ $(function () {
             elNoteNumber = $('.note-number');
 
         // animate content of note plus
-        elNotePlus.hide().animate({width: 'toggle'}, 500);
+        elNotePlus
+            .draggable({
+                axis       : 'y',
+                containment: 'window',
+                scroll     : false,
+                handle     : '.move'
+            })
+            .hide()
+            .animate({width: 'toggle'}, 500)
+        ;
+
+        // get note plus position
+        var notePos  = elNotePlus.offset(),
+            notePosX = notePos.left,
+            notePosY = notePos.top;
 
         // event on input note
         elNoteNumber
