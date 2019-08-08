@@ -17,7 +17,8 @@ module.exports = function () {
             files: {
                 '<%= theme.dist %>/js/main.core.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
-                    '<%= theme.build %>/js/jquery-ui.min.js'
+                    '<%= theme.build %>/js/jquery-ui.min.js',
+                    '<%= theme.src %>/js/font-awesome.js'
                 ]
             }
         },
@@ -26,6 +27,7 @@ module.exports = function () {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js',
+                    '<%= theme.src %>/js/font-awesome.js',
                     '<%= theme.src %>/js/content-script.js'
                 ]
             }
