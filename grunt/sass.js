@@ -9,10 +9,10 @@ module.exports = function () {
         main: {
             options: {
                 sourcemap: 'none',
-                style    : 'expanded'
+                style    : 'compressed'
             },
             files  : {
-                '<%= theme.build %>/css/main.css': '<%= theme.src %>/sass/main.scss'
+                '<%= theme.dist %>/css/main.min.css': '<%= theme.src %>/sass/main.scss'
             }
         }
     };

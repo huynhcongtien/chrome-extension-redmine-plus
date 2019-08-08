@@ -113,12 +113,12 @@ module.exports = function (grunt) {
                                 checked: grunt.file.isFile('package.json')
                             },
                             {
-                                value  : 'app/manifest.json',
-                                name   : 'manifest.json' + (!grunt.file.isFile('app/manifest.json') ? ' not found, will create one' : ''),
+                                value  : 'app/manifest/manifest_base.json',
+                                name   : 'manifest.json' + (!grunt.file.isFile('app/manifest/manifest_base.json') ? ' not found, will create one' : ''),
                                 checked: grunt.file.isFile('package.json')
                             }
                         ],
-                        default: ['package.json', 'app/manifest.json'],
+                        default: ['package.json', 'app/manifest/manifest_base.json'],
                         when   : function (answers) {
                             return answers['bump.prompt.useDefaults'] === false;
                         }

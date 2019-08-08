@@ -9,33 +9,18 @@ module.exports = function () {
         options  : {
             livereload: 35728
         },
-        // css_main : {
-        //     files: [
-        //         '<%= theme.build %>/css/main.css'
-        //     ],
-        //     tasks: [
-        //         'cssmin:main'
-        //     ]
-        // },
         sass_main: {
-            files  : [
+            files: [
                 '<%= theme.src %>/sass/main.scss'
             ],
-            // options: {
-            //     livereload: true
-            // },
-            tasks  : [
+            tasks: [
                 'sass:main',
-                'cssmin:main',
                 'notify:watch_sass'
             ]
         },
         js_main  : {
             files: [
                 '<%= theme.src %>/js/content-script.js'
-            ],
-            tasks: [
-                'notify:watch_js'
             ]
         },
         grunt    : {

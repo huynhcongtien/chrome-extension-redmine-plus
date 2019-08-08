@@ -48,7 +48,7 @@ module.exports = function () {
                     src    : [
                         'font-awesome/fonts/*'
                     ]
-                },
+                }
             ]
         }
     };

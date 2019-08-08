@@ -6,14 +6,13 @@
 module.exports = function () {
 
     return {
-        options: {
+        options  : {
             keepSpecialComments: 0
         },
-        main   : {
-            dest: '<%= theme.dist %>/css/main.min.css',
+        main_core: {
+            dest: '<%= theme.dist %>/css/main.core.min.css',
             src : [
-                '<%= theme.build %>/css/font-awesome.min.css',
-                '<%= theme.build %>/css/main.css'
+                '<%= theme.build %>/css/font-awesome.min.css'
             ]
         }
     };

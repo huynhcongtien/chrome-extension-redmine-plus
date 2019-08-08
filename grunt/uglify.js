@@ -13,18 +13,15 @@ module.exports = function () {
             report  : 'min',
             mangle  : true
         },
-        dev: {
+        main_dev: {
             files: {
-                '<%= theme.dist %>/js/main.min.js': [
+                '<%= theme.dist %>/js/main.core.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js'
-                ],
-                '<%= theme.dist %>/js/background.min.js': [
-                    '<%= theme.src %>/js/background.js'
-                ],
+                ]
             }
         },
-        pro: {
+        main_pro: {
             files: {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',

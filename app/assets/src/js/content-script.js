@@ -75,6 +75,7 @@ $(function () {
 
                 if (noteNumberNew > noteNumberMax) {
                     noteNumberNew = noteNumberMax;
+
                 } else if ($.isNumeric(noteNumberNew) && noteNumberNew < 1) {
                     noteNumberNew = 1;
                 }
@@ -93,6 +94,23 @@ $(function () {
                 elNotePlus.removeClass('on-focus');
             });
 
+        var elDirectionUp   = $('.direction.up:not(.disabled)'),
+            elDirectionDown = $('.direction.down:not(.disabled)')
+        ;
+
+        function disableDirection() {
+            if (noteNumber ===  1) {
+                elDirectionUp.addClass('disabled');
+            } else if (noteNumber === noteNumberMax) {
+                elDirectionDown.addClass('disabled');
+            } else {
+                elDirectionUp.removeClass('disabled');
+                elDirectionDown.removeClass('disabled');
+            }
+        }
+
+        disableDirection();
+
         /**
          * Goto note
          */
@@ -101,6 +119,8 @@ $(function () {
                 return;
             }
 
+            disableDirection();
+
             var contentNote = $('#note-' + noteNumber),
                 noteLink    = contentNote.find('a.journal-link');
 
@@ -108,7 +128,7 @@ $(function () {
         }
 
         // up note
-        $('.direction.up').click(function () {
+        elDirectionUp.click(function () {
             if (noteNumber > 1) {
                 elNoteNumber.val(--noteNumber);
                 gotoNote();
@@ -117,7 +137,7 @@ $(function () {
         });
 
         // down note
-        $('.direction.down').click(function () {
+        elDirectionDown.click(function () {
             if (noteNumber < noteNumberMax) {
                 elNoteNumber.val(++noteNumber);
                 gotoNote();

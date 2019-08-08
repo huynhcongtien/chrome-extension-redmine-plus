@@ -1,0 +1,15 @@
+{
+    "background": {
+        "scripts": [
+            "assets/src/js/chrome-reload.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "assets/dist/js/main.core.min.js",
+                "assets/src/js/content-script.js"
+            ]
+        }
+    ]
+}

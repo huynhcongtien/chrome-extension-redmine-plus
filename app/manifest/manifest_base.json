@@ -9,9 +9,7 @@
     },
     "default_locale": "en",
     "background": {
-        "scripts": [
-            "assets/src/js/chrome-reload.js"
-        ]
+        "scripts": []
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
@@ -30,10 +28,7 @@
             "matches": [
                 "*://redmine.lampart-vn.com/*"
             ],
-            "js": [
-                "assets/dist/js/main.core.min.js",
-                "assets/src/js/content-script.js"
-            ],
+            "js": [],
             "css": [
                 "assets/dist/css/main.core.min.css",
                 "assets/dist/css/main.min.css"

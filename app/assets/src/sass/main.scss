@@ -26,6 +26,18 @@
         position: relative;
         cursor: pointer;
 
+        &.up {
+            padding: 0 0 5px;
+        }
+
+        &.down {
+            padding: 5px 0 0;
+        }
+
+        &.disabled {
+            cursor: not-allowed;
+        }
+
         .fa {
             font-size: 20px;
             width: 100%;

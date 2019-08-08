@@ -1,0 +1,12 @@
+{
+    "background": {
+        "scripts": []
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "assets/dist/js/main.min.js"
+            ]
+        }
+    ]
+}
