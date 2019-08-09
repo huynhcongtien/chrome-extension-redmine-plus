@@ -31,7 +31,7 @@
         }
 
         &.down {
-            padding: 5px 0 0;
+            padding: 3px 0 0;
         }
 
         &.disabled {
@@ -54,6 +54,7 @@
     .note-number {
         width: 30px;
         text-align: center;
+        margin: 0;
     }
 
     .rotate {
@@ -67,7 +68,7 @@
     .move {
         position: absolute;
         left: -21px;
-        top: 22px;
+        top: 26px;
         padding: 0 5px 0 0;
         font-size: 16px;
         display: none;

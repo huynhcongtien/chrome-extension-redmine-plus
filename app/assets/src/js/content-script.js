@@ -1,15 +1,5 @@
 'use strict';
 
-// $(function () {
-//
-//     function notePlusCreate() {
-//
-//     }
-//
-//     notePlusCreate();
-//
-// });
-
 var RedminePlus = function () {
     this.init();
     this.createNotePlus();
@@ -18,8 +8,9 @@ var RedminePlus = function () {
 
 RedminePlus.prototype.init = function () {
     this.elHistory         = $('#history');
+    this.elNoteNumber      = null;
     this.noteNumberCurrent = '';
-    this.noteNumberMax     = 0;
+    this.noteNumberMax     = $('#history .journal').length;
     // this.directionClass = 'direction';
     this.elDirectionUp     = null;
     this.elDirectionDown   = null;
@@ -37,22 +28,7 @@ RedminePlus.prototype.createNotePlus = function () {
         return;
     }
 
-    var journalList = self.elHistory.find('.journal'),
-        currentUrl  = $(location).attr('href'),
-        currentUrls = currentUrl.split('#'),
-        noteNumber  = ''
-    ;
-
-    self.noteNumberMax = journalList.length;
-
-    if (currentUrls[1]) {
-        var noteText = currentUrls[1].split('-'),
-            type     = noteText[0];
-
-        if (type === 'note') {
-            self.noteNumberCurrent = noteText[1];
-        }
-    }
+    self.getNoteNumberCurrent();
 
     var notePlus = '' +
         '<div class="note-plus">' +
@@ -68,6 +44,7 @@ RedminePlus.prototype.createNotePlus = function () {
     $('body').append(notePlus);
 
     self.setDirectionElement();
+    self.elNoteNumber = $('.note-plus .note-number');
 
     var elNotePlus   = $('.note-plus'),
         elNoteNumber = $('.note-number')
@@ -86,10 +63,10 @@ RedminePlus.prototype.createNotePlus = function () {
     ;
 
     // get note plus position
-    var notePos  = elNotePlus.offset(),
-        notePosX = notePos.left,
-        notePosY = notePos.top
-    ;
+    // var notePos  = elNotePlus.offset(),
+    //     notePosX = notePos.left,
+    //     notePosY = notePos.top
+    // ;
 
     // event on input note
     elNoteNumber
@@ -131,39 +108,6 @@ RedminePlus.prototype.createNotePlus = function () {
         })
     ;
 
-    // var elDirectionUp   = $('.direction.up:not(.disabled)'),
-    //     elDirectionDown = $('.direction.down:not(.disabled)')
-    // ;
-    //
-    // function disableDirection() {
-    //     if (self.noteNumberCurrent === 1) {
-    //         elDirectionUp.addClass('disabled');
-    //     } else if (self.noteNumberCurrent === self.noteNumberMax) {
-    //         elDirectionDown.addClass('disabled');
-    //     } else {
-    //         elDirectionUp.removeClass('disabled');
-    //         elDirectionDown.removeClass('disabled');
-    //     }
-    // }
-    //
-    // disableDirection();
-
-    /**
-     * Goto note
-     */
-    // function gotoNote() {
-    //     if (!noteNumber || !$.isNumeric(noteNumber) || noteNumber < 0) {
-    //         return;
-    //     }
-    //
-    //     disableDirection();
-    //
-    //     var contentNote = $('#note-' + noteNumber),
-    //         noteLink    = contentNote.find('a.journal-link');
-    //
-    //     window.location = noteLink.attr('href');
-    // }
-
     // up note
     self.elDirectionUp.click(function () {
         if (self.noteNumberCurrent > 1) {
@@ -181,6 +125,33 @@ RedminePlus.prototype.createNotePlus = function () {
             elNoteNumber.blur();
         }
     });
+};
+
+RedminePlus.prototype.getNoteNumberCurrent = function () {
+    var self        = this,
+        currentUrl  = $(location).attr('href'),
+        currentUrls = currentUrl.split('#')
+    ;
+
+    $.each(currentUrls, function () {
+        var hash     = this,
+            noteText = hash.split('-'),
+            type     = noteText[0],
+            value    = noteText[1]
+        ;
+
+        if (type === 'note' && $.isNumeric(value)) {
+            self.noteNumberCurrent = noteText[1];
+            return false;
+        }
+    });
+};
+
+RedminePlus.prototype.updateNoteNumber = function () {
+    var self = this;
+
+    self.getNoteNumberCurrent();
+    self.elNoteNumber.val(self.noteNumberCurrent);
 };
 
 RedminePlus.prototype.disableDirection = function () {
@@ -211,6 +182,15 @@ RedminePlus.prototype.gotoNote = function () {
     window.location = noteLink.attr('href');
 };
 
-var x = new RedminePlus();
 
-console.log(x);
+$(function () {
+
+    var redminePlus = new RedminePlus();
+
+    console.log(redminePlus);
+
+    $(window).on('hashchange', function (e) {
+        redminePlus.updateNoteNumber();
+    });
+
+});
