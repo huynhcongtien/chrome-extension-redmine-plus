@@ -43,6 +43,7 @@ module.exports = function (grunt) {
         'sass',
         'cssmin',
         'uglify:main_dev',
+        'uglify:background_dev',
         'merge-json:dev',
         'notify:watch_dev',
         'watch'
@@ -55,6 +56,7 @@ module.exports = function (grunt) {
         'sass',
         'cssmin',
         'uglify:main_pro',
+        'uglify:background_pro',
         'merge-json:pro',
         'compress',
         'notify:watch_compress'

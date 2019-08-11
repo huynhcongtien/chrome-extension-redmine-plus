@@ -18,6 +18,7 @@ module.exports = function () {
                 '<%= theme.dist %>/js/main.core.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js',
+                    '<%= theme.build %>/js/jquery.magnific-popup.min.js',
                     '<%= theme.src %>/js/font-awesome.js'
                 ]
             }
@@ -27,8 +28,24 @@ module.exports = function () {
                 '<%= theme.dist %>/js/main.min.js': [
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js',
+                    '<%= theme.build %>/js/jquery.magnific-popup.min.js',
                     '<%= theme.src %>/js/font-awesome.js',
                     '<%= theme.src %>/js/content-script.js'
+                ]
+            }
+        },
+        background_dev: {
+            files: {
+                '<%= theme.dist %>/js/background.core.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js'
+                ]
+            }
+        },
+        background_pro: {
+            files: {
+                '<%= theme.dist %>/js/background.min.js': [
+                    '<%= theme.build %>/js/jquery.min.js',
+                    '<%= theme.src %>/js/background.js'
                 ]
             }
         }

@@ -15,7 +15,8 @@ module.exports = function () {
                     dest   : '<%= theme.build %>/css/',
                     src    : [
                         'bootstrap/dist/css/bootstrap.css',
-                        'font-awesome/css/font-awesome.min.css'
+                        // 'font-awesome/css/font-awesome.min.css'
+                        'magnific-popup/dist/magnific-popup.css'
                     ]
                 },
                 {
@@ -28,7 +29,8 @@ module.exports = function () {
                         'jquery/dist/jquery.min.js',
                         'vue/dist/vue.min.js',
                         'notifyjs-browser/dist/notify.js',
-                        'jquery-ui-dist/jquery-ui.min.js'
+                        'jquery-ui-dist/jquery-ui.min.js',
+                        'magnific-popup/dist/jquery.magnific-popup.min.js'
                     ]
                 },
                 {
