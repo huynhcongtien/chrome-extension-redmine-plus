@@ -260,9 +260,13 @@ RedminePlus.prototype.goToBottom = function () {
     $('html, body').animate({scrollTop: $(document).height()}, 'fast');
 };
 
+/**
+ * Initialize popup show image
+ */
 RedminePlus.prototype.popupImage = function () {
-    var self    = this,
-        listImg = []
+    var self     = this,
+        listImg  = [],
+        imgOrder = 0
     ;
 
     $('.wiki img').each(function () {
@@ -283,16 +287,42 @@ RedminePlus.prototype.popupImage = function () {
                 _link      : journalLink || '',
                 _noteNumber: noteNumber
             });
+
+            elImg
+                .addClass('magnific')
+                .data('magnific-id', imgOrder)
+            ;
+
+            imgOrder++;
         }
     });
 
+    $('img.magnific').on('click', function () {
+        var elImg    = $(this),
+            orderImg = elImg.data('magnific-id')
+        ;
+
+        self.openPopupImg(listImg, orderImg);
+    });
+
+};
+
+/**
+ * Popup show image
+ *
+ * @param {Array} listImg
+ * @param {int} index
+ */
+RedminePlus.prototype.openPopupImg = function (listImg, index) {
+    var self = this;
+
     $.magnificPopup.open({
-        gallery: {
+        gallery  : {
             enabled: true
         },
-        type   : 'image',
-        items  : listImg,
-        image  : {
+        type     : 'image',
+        items    : listImg,
+        image    : {
             titleSrc: function (item) {
                 var link = '<a href="' + item.data._link + '">#note-' + item.data._noteNumber + '</a>';
 
@@ -302,8 +332,16 @@ RedminePlus.prototype.popupImage = function () {
 
                 return '(In ' + link + ')' + ' ' + item.data._title;
             }
+        },
+        callbacks: {
+            beforeOpen: function () {
+                self.elNotePlus.hide();
+            },
+            close     : function () {
+                self.elNotePlus.show();
+            }
         }
-    }, 0);
+    }, index);
 };
 
 /**
