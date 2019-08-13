@@ -171,7 +171,7 @@ RedminePlus.prototype.getNoteNumberByLink = function (link) {
     }
 
     var links      = link.split('#'),
-        noteNumber = 0
+        noteNumber = ''
     ;
 
     $.each(links, function () {
