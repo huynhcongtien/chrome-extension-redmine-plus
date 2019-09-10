@@ -19,6 +19,7 @@ module.exports = function () {
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js',
                     '<%= theme.build %>/js/jquery.magnific-popup.min.js',
+                    '<%= theme.build %>/js/select2.min.js',
                     '<%= theme.src %>/js/font-awesome.js'
                 ]
             }
@@ -29,6 +30,7 @@ module.exports = function () {
                     '<%= theme.build %>/js/jquery.min.js',
                     '<%= theme.build %>/js/jquery-ui.min.js',
                     '<%= theme.build %>/js/jquery.magnific-popup.min.js',
+                    '<%= theme.build %>/js/select2.min.js',
                     '<%= theme.src %>/js/font-awesome.js',
                     '<%= theme.src %>/js/content-script.js'
                 ]

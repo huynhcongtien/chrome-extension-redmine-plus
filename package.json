@@ -12,6 +12,7 @@
     "jquery-ui-dist": "^1.12.1",
     "magnific-popup": "^1.1.0",
     "notifyjs-browser": "^0.4.2",
+    "select2": "^4.0.10",
     "vue": "^2.6.10"
   },
   "devDependencies": {
