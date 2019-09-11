@@ -374,4 +374,10 @@ $(function () {
         redminePlus.updateNoteNumber();
     });
 
+    $('.contextual .icon-edit').click(function () {
+        $('select').select2({
+            width: 'resolve'
+        });
+    });
+
 });

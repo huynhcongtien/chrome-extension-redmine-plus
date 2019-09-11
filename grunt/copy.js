@@ -16,7 +16,8 @@ module.exports = function () {
                     src    : [
                         'bootstrap/dist/css/bootstrap.css',
                         // 'font-awesome/css/font-awesome.min.css'
-                        'magnific-popup/dist/magnific-popup.css'
+                        'magnific-popup/dist/magnific-popup.css',
+                        'select2/dist/css/select2.min.css'
                     ]
                 },
                 {
@@ -30,7 +31,8 @@ module.exports = function () {
                         'vue/dist/vue.min.js',
                         'notifyjs-browser/dist/notify.js',
                         'jquery-ui-dist/jquery-ui.min.js',
-                        'magnific-popup/dist/jquery.magnific-popup.min.js'
+                        'magnific-popup/dist/jquery.magnific-popup.min.js',
+                        'select2/dist/js/select2.min.js'
                     ]
                 },
                 {
