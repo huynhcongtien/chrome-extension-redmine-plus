@@ -14,7 +14,7 @@ module.exports = function () {
                     cwd    : 'node_modules',
                     dest   : '<%= theme.build %>/css/',
                     src    : [
-                        'bootstrap/dist/css/bootstrap.css',
+                        //'bootstrap/dist/css/bootstrap.min.css',
                         // 'font-awesome/css/font-awesome.min.css'
                         'magnific-popup/dist/magnific-popup.css',
                         'select2/dist/css/select2.min.css'

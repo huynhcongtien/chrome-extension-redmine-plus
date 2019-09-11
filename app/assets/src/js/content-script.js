@@ -374,10 +374,47 @@ $(function () {
         redminePlus.updateNoteNumber();
     });
 
+    $('#update, #new_time_entry, #quick-search, #issue_extensions_search, #new-relation-form, #issue-form')
+        .find('select').each(function () {
+            var elSelect = $(this);
+            elSelect.select2({
+                width: 'resolve'
+            });
+        })
+        .end()
+        .each(function () {
+            var elContent = $(this);
+
+            elContent
+                .find('input:not(:submit,:button), textarea')
+                .addClass('red-form-control')
+                .end()
+                .find('input:submit')
+                .addClass('red-btn red-btn-sm red-btn-primary')
+                .end()
+                .find('input:button')
+                .addClass('red-btn red-btn-sm red-btn-secondary')
+            ;
+        })
+    ;
+
     $('.contextual .icon-edit').click(function () {
-        $('select').select2({
-            width: 'resolve'
-        });
+        $('#update select')
+            .select2('destroy')
+            .select2({
+                width: 'resolve'
+            })
+        ;
+    });
+
+    $('.red-form-control, .select2-hidden-accessible').each(function () {
+        var elInput = $(this),
+            elLabel = elInput.prev()
+        ;
+
+        if (elLabel.length) {
+            elLabel.addClass('red-label-control');
+        }
     });
 
 });
