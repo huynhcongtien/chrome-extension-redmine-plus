@@ -17,6 +17,7 @@ var RedminePlus = function () {
     ;
 
     chrome.storage.sync.get(storageVars, function (storage) {
+        console.info(storage);
         self.storage = storage;
         self.createNotePlus();
         self.disableDirection();
@@ -156,6 +157,8 @@ RedminePlus.prototype.updatePosition = function () {
     var self     = this,
         position = self.elNotePlus.position()
     ;
+
+    console.info(position);
 
     chrome.storage.sync.set({position: position});
 };
@@ -324,13 +327,22 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
         items    : listImg,
         image    : {
             titleSrc: function (item) {
-                var link = '<a href="' + item.data._link + '">#note-' + item.data._noteNumber + '</a>';
+                var link = '' +
+                    '<a href="' + item.data._link + '" class="ref-link-note">' +
+                    '   #note-' + item.data._noteNumber +
+                    '</a>'
+                ;
 
                 if (!item.data._link) {
                     link = 'Description';
                 }
 
-                return '(In ' + link + ')' + ' ' + item.data._title;
+                return '(In ' + link + ')' +
+                    ' <a href="' + item.data.src + '" target="_blank">' +
+                    '   ' + item.data._title +
+                    '   <i class="fa fa-external-link" aria-hidden="true"></i> ' +
+                    '</a>'
+                ;
             }
         },
         callbacks: {
@@ -342,6 +354,11 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
             }
         }
     }, index);
+
+    // event close image popup when click on link of image
+    $('body').on('click', '.ref-link-note', function () {
+        $.magnificPopup.close();
+    });
 };
 
 /**

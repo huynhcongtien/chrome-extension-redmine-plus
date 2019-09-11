@@ -13,7 +13,6 @@
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
-        "https://redmine.lampart-vn.com/*",
         "alarms",
         "notifications",
         "background",
@@ -26,7 +25,8 @@
     "content_scripts": [
         {
             "matches": [
-                "*://redmine.lampart-vn.com/*"
+                "*://redmine.lampart-vn.com/*",
+                "*://mid-dev-redmine.fraise.jp/*"
             ],
             "js": [],
             "css": [
