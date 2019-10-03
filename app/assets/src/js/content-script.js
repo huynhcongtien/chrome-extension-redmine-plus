@@ -9,6 +9,7 @@ var RedminePlus = function () {
     // this.directionClass = 'direction';
     this.elDirectionUp     = null;
     this.elDirectionDown   = null;
+    this.input_new_style   = [];
 
     var self        = this,
         storageVars = [
@@ -361,6 +362,10 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
     });
 };
 
+RedminePlus.prototype.update_list_input_new_style = function () {
+
+};
+
 /**
  * Document ready
  */
@@ -374,8 +379,13 @@ $(function () {
         redminePlus.updateNoteNumber();
     });
 
-    $('#update, #new_time_entry, #quick-search, #issue_extensions_search, #new-relation-form, #issue-form')
-        .find('select').each(function () {
+    // $('#update, #new_time_entry, #quick-search, #issue_extensions_search, ' +
+    //     '#new-relation-form, #issue-form, #my_account_form, #filters-table, .add-filter,' +
+    //     '#query_form, #tab-content-info, #content'
+    // )
+    $('#update, #new_time_entry, #issue-form, .edit_time_entry')
+        .find('select')
+        .each(function () {
             var elSelect = $(this);
             elSelect.select2({
                 width: 'resolve'
@@ -386,7 +396,7 @@ $(function () {
             var elContent = $(this);
 
             elContent
-                .find('input:not(:submit,:button), textarea')
+                .find('input:not(:submit,:button, :checkbox), textarea')
                 .addClass('red-form-control')
                 .end()
                 .find('input:submit')
@@ -397,6 +407,11 @@ $(function () {
             ;
         })
     ;
+
+    $('[name="datepicker"]').addClass('red-form-control');
+    $('[name="project_id"], [name="meeting_rooms"]').select2({
+        width: 'resolve'
+    });
 
     $('.contextual .icon-edit').click(function () {
         $('#update select')
@@ -415,6 +430,16 @@ $(function () {
         if (elLabel.length) {
             elLabel.addClass('red-label-control');
         }
+    });
+
+    // change style of text for code
+    $('.editable').each(function () {
+        var elEditable   = $(this),
+            textOriginal = elEditable.html(),
+            textNew      = textOriginal.replace(/`(.*?)`/gm, '<code class="txt-code">$1</code>')
+        ;
+
+        elEditable.html(textNew);
     });
 
 });
