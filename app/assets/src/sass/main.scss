@@ -177,3 +177,16 @@ textarea.red-form-control {
 .journal {
     line-height: 1.5em;
 }
+.warn {
+    background-color: coral;
+    color: #fff;
+}
+#issue_tree .list.issues > tbody > tr {
+    &:hover {
+        background-color: #628DB6;
+        color: #fff;
+        a {
+            color: #fff;
+        }
+    }
+}

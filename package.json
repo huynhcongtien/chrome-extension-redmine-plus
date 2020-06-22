@@ -1,27 +1,27 @@
 {
   "name": "chrome-extension-redmine-plus",
-  "version": "0.5.0",
+  "version": "1.1.0",
   "description": "Support redmine go to note",
   "main": "app/manifest.json",
   "homepage": "https://github.com/huynhcongtien/chrome-extension-ieyasu-plus",
   "repository": "https://github.com/huynhcongtien/chrome-extension-ieyasu-plus.git",
   "dependencies": {
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.5.0",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "jquery-ui-dist": "^1.12.1",
     "magnific-popup": "^1.1.0",
     "notifyjs-browser": "^0.4.2",
-    "select2": "^4.0.10",
-    "vue": "^2.6.10"
+    "select2": "^4.0.13",
+    "vue": "^2.6.11"
   },
   "devDependencies": {
-    "grunt": "^1.0.4",
+    "grunt": "^1.1.0",
     "grunt-bump": "^0.8.0",
     "grunt-changelog": "^0.3.2",
     "grunt-config-dir": "^0.3.2",
     "grunt-contrib-clean": "~2.0.0",
-    "grunt-contrib-compress": "^1.5.0",
+    "grunt-contrib-compress": "^1.6.0",
     "grunt-contrib-copy": "~1.0.0",
     "grunt-contrib-csslint": "^2.0.0",
     "grunt-contrib-cssmin": "^3.0.0",
@@ -35,9 +35,9 @@
     "grunt-shell": "^3.0.1",
     "load-grunt-tasks": "^5.1.0",
     "lodash": "^4.17.15",
-    "popper.js": "^1.15.0",
-    "semver": "^6.3.0",
-    "tar": "^4.4.13"
+    "popper.js": "^1.16.1",
+    "semver": "^7.3.2",
+    "tar": "^6.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

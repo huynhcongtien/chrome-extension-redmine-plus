@@ -18,12 +18,15 @@ var RedminePlus = function () {
     ;
 
     chrome.storage.sync.get(storageVars, function (storage) {
-        console.info(storage);
         self.storage = storage;
         self.createNotePlus();
         self.disableDirection();
         self.popupImage();
     });
+
+    // do function
+    this.listeningNoteUpdate();
+    this.getDetailSubTask();
 };
 
 RedminePlus.prototype.createNotePlus = function () {
@@ -342,8 +345,7 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
                     ' <a href="' + item.data.src + '" target="_blank">' +
                     '   ' + item.data._title +
                     '   <i class="fa fa-external-link" aria-hidden="true"></i> ' +
-                    '</a>'
-                ;
+                    '</a>';
             }
         },
         callbacks: {
@@ -362,8 +364,114 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
     });
 };
 
-RedminePlus.prototype.update_list_input_new_style = function () {
+RedminePlus.prototype.listeningNoteUpdate = function () {
+    let target         = $('.journal'),
+        // Options for the observer (which mutations to observe)
+        observerConfig = {childList: true},
+        observer       = []
+    ;
 
+    $.each(target, function (index) {
+        const elJournal = $(this);
+        // create an observer instance
+        observer[index] = new MutationObserver(function (mutationRecordsList) {
+            mutationRecordsList.forEach(function (mutationRecord) {
+                console.log(mutationRecord);
+                if (mutationRecord.addedNodes.length) {
+                    let addedNode         = $(mutationRecord.addedNodes[0]),
+                        elTotalAndBtnCard = addedNode.find('[class^="totalAndSubmit"]')
+                    ;
+
+                    console.log(addedNode);
+
+                    if (!elTotalAndBtnCard.length) {
+                        return true;
+                    }
+                }
+            });
+        })
+        ;
+        // pass in the target node, as well as the observer options
+        observer[index].observe(elJournal[0], observerConfig);
+    });
+
+
+    $('body').on('click', '[accesskey="r"]', function () {
+        // let elPreview = $(this),
+        //     elJournal=elPreview.closest('.journal'),
+        // idJournal=elJournal.
+        // elShowPreview = elForm.find('[id^=journal')
+        // ;
+    });
+};
+
+RedminePlus.prototype.convertDayOfMonthToText = function (day) {
+    switch (day) {
+        case 0:
+            return 'Sun';
+        case 1:
+            return 'Mon';
+        case 2:
+            return 'Tue';
+        case 3:
+            return 'Wed';
+        case 4:
+            return 'Thu';
+        case 5:
+            return 'Fri';
+        case 6:
+        default:
+            return 'Sat';
+
+    }
+};
+
+RedminePlus.prototype.getDetailSubTask = function () {
+    const self = this;
+
+    $('#issue_tree .list.issues > tbody > tr').each(function () {
+        const elTr      = $(this),
+              elSubject = elTr.find('.subject'),
+              linkTask  = elSubject.find('a').attr('href')
+        ;
+
+        $.ajax({
+            url     : linkTask,
+            type    : 'get',
+            dataType: 'html'
+        }).done(function (response) {
+            const html                = $(response),
+                  elStartDate         = html.find('.start-date:last-child'),
+                  elDueDate           = html.find('.due-date:last-child'),
+                  startDate           = elStartDate.text(),
+                  dueDate             = elDueDate.text(),
+                  startDateList       = startDate.split('/'),
+                  dueDateList         = dueDate.split('/'),
+                  startDateObj        = new Date(startDateList[2] + '-' + startDateList[1] + '-' + startDateList[0]),
+                  dueDateObj          = new Date(dueDateList[2] + '-' + dueDateList[1] + '-' + dueDateList[0]),
+                  startDateOfWeek     = startDateObj.getDay(),
+                  duetDateOfWeek      = dueDateObj.getDay(),
+                  startDateOfWeekText = self.convertDayOfMonthToText(startDateOfWeek),
+                  dueDateOfWeekText   = self.convertDayOfMonthToText(duetDateOfWeek),
+                  classStartDate      = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
+                  classDueDate        = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : ''
+            ;
+
+            elSubject
+                .next()
+                .next()
+                .after('' +
+                    '<td class="start-date">' +
+                    '   <span class="' + classStartDate + '">(' + startDateOfWeekText + ')</span>' +
+                    '   ' + startDate + '' +
+                    '</td>' +
+                    '<td class="due-date">' +
+                    '   <span class="' + classDueDate + '">(' + dueDateOfWeekText + ')</span>' +
+                    '   ' + dueDate + '' +
+                    '</td>'
+                );
+        });
+    });
 };
 
 /**
