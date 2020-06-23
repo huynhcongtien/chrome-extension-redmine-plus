@@ -406,6 +406,10 @@ RedminePlus.prototype.listeningNoteUpdate = function () {
 };
 
 RedminePlus.prototype.convertDayOfMonthToText = function (day) {
+    if (isNaN(day)) {
+        return '';
+    }
+
     switch (day) {
         case 0:
             return 'Sun';
