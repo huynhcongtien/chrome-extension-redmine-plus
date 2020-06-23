@@ -435,6 +435,14 @@ RedminePlus.prototype.getDetailSubTask = function () {
               linkTask  = elSubject.find('a').attr('href')
         ;
 
+        elSubject
+            .next()
+            .next()
+            .after('' +
+                '<td class="start-date">----Loading----</td>' +
+                '<td class="due-date">----Loading----</td>'
+            );
+
         $.ajax({
             url     : linkTask,
             type    : 'get',
@@ -457,19 +465,12 @@ RedminePlus.prototype.getDetailSubTask = function () {
                   classDueDate        = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : ''
             ;
 
-            elSubject
-                .next()
-                .next()
-                .after('' +
-                    '<td class="start-date">' +
-                    '   <span class="' + classStartDate + '">(' + startDateOfWeekText + ')</span>' +
-                    '   ' + startDate + '' +
-                    '</td>' +
-                    '<td class="due-date">' +
-                    '   <span class="' + classDueDate + '">(' + dueDateOfWeekText + ')</span>' +
-                    '   ' + dueDate + '' +
-                    '</td>'
-                );
+            elTr
+                .find('.start-date')
+                .html('<span class="' + classStartDate + '">(' + startDateOfWeekText + ')</span> ' + startDate)
+                .end()
+                .find('.due-date')
+                .html('<span class="' + classDueDate + '">(' + dueDateOfWeekText + ')</span> ' + dueDate);
         });
     });
 };
