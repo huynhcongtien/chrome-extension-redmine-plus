@@ -9,6 +9,7 @@ var RedminePlus = function () {
     // this.directionClass = 'direction';
     this.elDirectionUp     = null;
     this.elDirectionDown   = null;
+    this.input_new_style   = [];
 
     var self        = this,
         storageVars = [
@@ -22,6 +23,10 @@ var RedminePlus = function () {
         self.disableDirection();
         self.popupImage();
     });
+
+    // do function
+    this.listeningNoteUpdate();
+    this.getDetailSubTask();
 };
 
 RedminePlus.prototype.createNotePlus = function () {
@@ -156,6 +161,8 @@ RedminePlus.prototype.updatePosition = function () {
     var self     = this,
         position = self.elNotePlus.position()
     ;
+
+    console.info(position);
 
     chrome.storage.sync.set({position: position});
 };
@@ -324,13 +331,21 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
         items    : listImg,
         image    : {
             titleSrc: function (item) {
-                var link = '<a href="' + item.data._link + '">#note-' + item.data._noteNumber + '</a>';
+                var link = '' +
+                    '<a href="' + item.data._link + '" class="ref-link-note">' +
+                    '   #note-' + item.data._noteNumber +
+                    '</a>'
+                ;
 
                 if (!item.data._link) {
                     link = 'Description';
                 }
 
-                return '(In ' + link + ')' + ' ' + item.data._title;
+                return '(In ' + link + ')' +
+                    ' <a href="' + item.data.src + '" target="_blank">' +
+                    '   ' + item.data._title +
+                    '   <i class="fa fa-external-link" aria-hidden="true"></i> ' +
+                    '</a>';
             }
         },
         callbacks: {
@@ -342,6 +357,126 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
             }
         }
     }, index);
+
+    // event close image popup when click on link of image
+    $('body').on('click', '.ref-link-note', function () {
+        $.magnificPopup.close();
+    });
+};
+
+RedminePlus.prototype.listeningNoteUpdate = function () {
+    let target         = $('.journal'),
+        // Options for the observer (which mutations to observe)
+        observerConfig = {childList: true},
+        observer       = []
+    ;
+
+    $.each(target, function (index) {
+        const elJournal = $(this);
+        // create an observer instance
+        observer[index] = new MutationObserver(function (mutationRecordsList) {
+            mutationRecordsList.forEach(function (mutationRecord) {
+                console.log(mutationRecord);
+                if (mutationRecord.addedNodes.length) {
+                    let addedNode         = $(mutationRecord.addedNodes[0]),
+                        elTotalAndBtnCard = addedNode.find('[class^="totalAndSubmit"]')
+                    ;
+
+                    console.log(addedNode);
+
+                    if (!elTotalAndBtnCard.length) {
+                        return true;
+                    }
+                }
+            });
+        })
+        ;
+        // pass in the target node, as well as the observer options
+        observer[index].observe(elJournal[0], observerConfig);
+    });
+
+
+    $('body').on('click', '[accesskey="r"]', function () {
+        // let elPreview = $(this),
+        //     elJournal=elPreview.closest('.journal'),
+        // idJournal=elJournal.
+        // elShowPreview = elForm.find('[id^=journal')
+        // ;
+    });
+};
+
+RedminePlus.prototype.convertDayOfMonthToText = function (day) {
+    if (isNaN(day)) {
+        return '';
+    }
+
+    switch (day) {
+        case 0:
+            return 'Sun';
+        case 1:
+            return 'Mon';
+        case 2:
+            return 'Tue';
+        case 3:
+            return 'Wed';
+        case 4:
+            return 'Thu';
+        case 5:
+            return 'Fri';
+        case 6:
+        default:
+            return 'Sat';
+
+    }
+};
+
+RedminePlus.prototype.getDetailSubTask = function () {
+    const self = this;
+
+    $('#issue_tree .list.issues > tbody > tr').each(function () {
+        const elTr      = $(this),
+              elSubject = elTr.find('.subject'),
+              linkTask  = elSubject.find('a').attr('href')
+        ;
+
+        elSubject
+            .next()
+            .next()
+            .after('' +
+                '<td class="start-date">----Loading----</td>' +
+                '<td class="due-date">----Loading----</td>'
+            );
+
+        $.ajax({
+            url     : linkTask,
+            type    : 'get',
+            dataType: 'html'
+        }).done(function (response) {
+            const html                = $(response),
+                  elStartDate         = html.find('.start-date:last-child'),
+                  elDueDate           = html.find('.due-date:last-child'),
+                  startDate           = elStartDate.text(),
+                  dueDate             = elDueDate.text(),
+                  startDateList       = startDate.split('/'),
+                  dueDateList         = dueDate.split('/'),
+                  startDateObj        = new Date(startDateList[2] + '-' + startDateList[1] + '-' + startDateList[0]),
+                  dueDateObj          = new Date(dueDateList[2] + '-' + dueDateList[1] + '-' + dueDateList[0]),
+                  startDateOfWeek     = startDateObj.getDay(),
+                  duetDateOfWeek      = dueDateObj.getDay(),
+                  startDateOfWeekText = self.convertDayOfMonthToText(startDateOfWeek),
+                  dueDateOfWeekText   = self.convertDayOfMonthToText(duetDateOfWeek),
+                  classStartDate      = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
+                  classDueDate        = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : ''
+            ;
+
+            elTr
+                .find('.start-date')
+                .html('<span class="' + classStartDate + '">(' + startDateOfWeekText + ')</span> ' + startDate)
+                .end()
+                .find('.due-date')
+                .html('<span class="' + classDueDate + '">(' + dueDateOfWeekText + ')</span> ' + dueDate);
+        });
+    });
 };
 
 /**
@@ -357,10 +492,67 @@ $(function () {
         redminePlus.updateNoteNumber();
     });
 
+    // $('#update, #new_time_entry, #quick-search, #issue_extensions_search, ' +
+    //     '#new-relation-form, #issue-form, #my_account_form, #filters-table, .add-filter,' +
+    //     '#query_form, #tab-content-info, #content'
+    // )
+    $('#update, #new_time_entry, #issue-form, .edit_time_entry')
+        .find('select')
+        .each(function () {
+            var elSelect = $(this);
+            elSelect.select2({
+                width: 'resolve'
+            });
+        })
+        .end()
+        .each(function () {
+            var elContent = $(this);
+
+            elContent
+                .find('input:not(:submit,:button, :checkbox), textarea')
+                .addClass('red-form-control')
+                .end()
+                .find('input:submit')
+                .addClass('red-btn red-btn-sm red-btn-primary')
+                .end()
+                .find('input:button')
+                .addClass('red-btn red-btn-sm red-btn-secondary')
+            ;
+        })
+    ;
+
+    $('[name="datepicker"]').addClass('red-form-control');
+    $('[name="project_id"], [name="meeting_rooms"]').select2({
+        width: 'resolve'
+    });
+
     $('.contextual .icon-edit').click(function () {
-        $('select').select2({
-            width: 'resolve'
-        });
+        $('#update select')
+            .select2('destroy')
+            .select2({
+                width: 'resolve'
+            })
+        ;
+    });
+
+    $('.red-form-control, .select2-hidden-accessible').each(function () {
+        var elInput = $(this),
+            elLabel = elInput.prev()
+        ;
+
+        if (elLabel.length) {
+            elLabel.addClass('red-label-control');
+        }
+    });
+
+    // change style of text for code
+    $('.editable').each(function () {
+        var elEditable   = $(this),
+            textOriginal = elEditable.html(),
+            textNew      = textOriginal.replace(/`(.*?)`/gm, '<code class="txt-code">$1</code>')
+        ;
+
+        elEditable.html(textNew);
     });
 
 });

@@ -93,3 +93,100 @@ img {
         }
     }
 }
+.red-form-control {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(170, 170, 170) !important;
+    border-image: initial;
+    border-radius: 4px !important;
+    box-sizing: border-box;
+    display: inline-block;
+    user-select: none;
+}
+input.red-form-control {
+    height: 28px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+textarea.red-form-control {
+    padding: 5px !important;
+}
+.red-label-control {
+    line-height: 28px;
+}
+.red-btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    cursor: pointer;
+}
+.red-btn-sm {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
+.red-btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+    &:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+}
+.red-btn-primary {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    &:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+}
+.red-btn-secondary {
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    &:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+}
+.editable {
+    .txt-code {
+        padding: 2px 4px;
+        color: #c7254e;
+        background-color: #f9f2f4;
+        border-radius: 4px;
+        font-family: inherit;
+    }
+}
+.journal {
+    line-height: 1.5em;
+}
+.warn {
+    background-color: coral;
+    color: #fff;
+}
+#issue_tree .list.issues > tbody > tr {
+    &:hover {
+        background-color: #628DB6;
+        color: #fff;
+        a {
+            color: #fff;
+        }
+    }
+}

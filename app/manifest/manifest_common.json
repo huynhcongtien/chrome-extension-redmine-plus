@@ -1,6 +1,6 @@
 {
     "name": "__MSG_appName__",
-    "version": "0.0.1",
+    "version": "1.1.0",
     "manifest_version": 2,
     "description": "__MSG_appDescription__",
     "icons": {
@@ -13,7 +13,6 @@
     },
     "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
-        "https://redmine.lampart-vn.com/*",
         "alarms",
         "notifications",
         "background",
@@ -26,7 +25,8 @@
     "content_scripts": [
         {
             "matches": [
-                "*://redmine.lampart-vn.com/*"
+                "*://redmine.lampart-vn.com/*",
+                "*://mid-dev-redmine.fraise.jp/*"
             ],
             "js": [
                 "assets/js/content-script.js"

@@ -13,6 +13,7 @@ module.exports = function () {
             dest: '<%= theme.dist %>/css/main.core.min.css',
             src : [
                 // '<%= theme.build %>/css/font-awesome.min.css'
+                //'<%= theme.build %>/css/bootstrap.min.css',
                 '<%= theme.build %>/css/magnific-popup.css',
                 '<%= theme.build %>/css/select2.min.css'
             ]

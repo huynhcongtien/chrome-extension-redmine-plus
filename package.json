@@ -1,6 +1,6 @@
 {
   "name": "chrome-extension-redmine-plus",
-  "version": "0.5.0",
+  "version": "1.1.0",
   "description": "Support redmine go to note",
   "main": "app/manifest.json",
   "homepage": "https://github.com/huynhcongtien/chrome-extension-ieyasu-plus",
