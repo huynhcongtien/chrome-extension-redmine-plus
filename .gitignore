@@ -28,5 +28,6 @@ nbproject/
 Thumbs.db
 *.zip
 package-lock.json
+yarn.lock
 dist/
 *.rar
