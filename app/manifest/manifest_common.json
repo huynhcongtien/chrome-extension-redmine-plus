@@ -4,8 +4,8 @@
     "manifest_version": 2,
     "description": "__MSG_appDescription__",
     "icons": {
-        "16": "assets/dist/img/icon-16.png",
-        "128": "assets/dist/img/icon-128.png"
+        "19": "assets/img/icon-19.png",
+        "38": "assets/img/icon-38.png"
     },
     "default_locale": "en",
     "background": {
@@ -28,10 +28,11 @@
             "matches": [
                 "*://redmine.lampart-vn.com/*"
             ],
-            "js": [],
+            "js": [
+                "assets/js/content-script.js"
+            ],
             "css": [
-                "assets/dist/css/main.core.min.css",
-                "assets/dist/css/main.min.css"
+                "assets/css/content-script.css"
             ],
             "run_at": "document_end",
             "all_frames": false
@@ -39,8 +40,8 @@
     ],
     "browser_action": {
         "default_icon": {
-            "19": "assets/dist/img/icon-19.png",
-            "38": "assets/dist/img/icon-38.png"
+            "19": "assets/img/icon-19.png",
+            "38": "assets/img/icon-38.png"
         },
         "default_title": "Redmine Plus"
     }

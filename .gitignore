@@ -30,6 +30,5 @@ Thumbs.db
 /archive.zip
 /package-lock.json
 /yarn.lock
-app/manifest.json
-app/assets/dist
-app/assets/build
+/dist/
+*.rar
