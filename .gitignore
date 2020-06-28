@@ -1,4 +1,3 @@
-build
 *~
 *.bak
 *.log
@@ -27,8 +26,7 @@ nbproject/
 ._*
 .DS_Store
 Thumbs.db
-/archive.zip
-/package-lock.json
-/yarn.lock
-/dist/
+*.zip
+package-lock.json
+dist/
 *.rar

@@ -11,12 +11,7 @@ const TerserPlugin               = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
-        'chrome-reload' : './app/assets/js/chrome-reload.js',
         background      : './app/assets/js/background.js',
-        popup           : [
-            './app/assets/js/popup.js',
-            './app/assets/sass/popup.scss'
-        ],
         'content-script': [
             './app/assets/sass/content-script.scss',
             './app/assets/js/content-script.js'

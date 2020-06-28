@@ -11,10 +11,8 @@ module.exports = function () {
         },
         assets : {
             src: [
-                '<%= theme.src %>/js/content-script.js',
                 '<%= theme.src %>/js/background.js',
-                '<%= theme.src %>/js/popup.js',
-                '<%= theme.src %>/js/setting.js'
+                '<%= theme.src %>/js/content-script.js'
             ]
         }
     };

@@ -11,6 +11,9 @@ module.exports = merge(common, {
         aggregateTimeout: 500
         // poll: true // Use this when you need to fallback to poll based watching (webpack 1.9.1+ only)
     },
+    entry       : {
+        'chrome-reload': './app/assets/js/chrome-reload.js'
+    },
     plugins     : [
         new LiveReloadPlugin({
             port: 35729

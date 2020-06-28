@@ -11,6 +11,9 @@ module.exports = function () {
         },
         bumpVersion: {
             command: option => 'grunt bump-only --setversion=' + option
+        },
+        buildSource: {
+            command: 'npm run build'
         }
     };
 
