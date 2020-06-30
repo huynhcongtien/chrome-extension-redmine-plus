@@ -227,7 +227,11 @@ RedminePlus.prototype.updateNoteNumber = function () {
  * Setup disable direction element
  */
 RedminePlus.prototype.disableDirection = function () {
-    var self = this;
+    if (!this.elDirectionUp || !this.elDirectionUp.length) {
+        return;
+    }
+
+    const self = this;
 
     if (self.noteNumberCurrent === 1) {
         self.elDirectionUp.addClass('disabled');
