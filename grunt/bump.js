@@ -9,14 +9,14 @@ module.exports = function () {
         options: {
             files             : [
                 'package.json',
-                'app/manifest.json'
+                'app/manifest/manifest_common.json'
             ],
             updateConfigs     : [],
             commit            : true,
             commitMessage     : 'Release v%VERSION%',
             commitFiles       : [
                 'package.json',
-                'app/manifest.json'
+                'app/manifest/manifest_common.json'
             ],
             createTag         : false,
             tagName           : 'v%VERSION%',

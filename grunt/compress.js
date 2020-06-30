@@ -8,14 +8,14 @@ module.exports = function () {
     return {
         main: {
             options: {
-                archive: '<%= theme.compressFileName %>'
+                archive: '<%= pkg.name %>.zip'
             },
             files  : [{
                 expand: true,
-                cwd   : 'app/',
+                cwd   : 'dist/',
                 src   : [
                     '_locales/**',
-                    'assets/dist/**',
+                    'assets/**',
                     'pages/**',
                     'manifest.json'
                 ],
