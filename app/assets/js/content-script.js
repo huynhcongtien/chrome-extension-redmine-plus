@@ -6,6 +6,7 @@ window.$ = window.jQuery = jQuery;
 
 require('select2');
 require('jquery-ui');
+require('magnific-popup');
 
 var RedminePlus = function () {
     this.elHistory         = $('#history');
