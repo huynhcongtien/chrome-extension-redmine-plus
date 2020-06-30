@@ -434,9 +434,12 @@ RedminePlus.prototype.getDetailSubTask = function () {
     const self = this;
 
     $('#issue_tree .list.issues > tbody > tr').each(function () {
-        const elTr      = $(this),
-              elSubject = elTr.find('.subject'),
-              linkTask  = elSubject.find('a').attr('href')
+        const elTr       = $(this),
+              elSubject  = elTr.find('.subject'),
+              linkTask   = elSubject.find('a').attr('href'),
+              elStatus   = elSubject.next(),
+              statusText = elStatus.text(),
+              now        = new Date()
         ;
 
         elSubject
@@ -459,22 +462,29 @@ RedminePlus.prototype.getDetailSubTask = function () {
                   dueDate             = elDueDate.text(),
                   startDateList       = startDate.split('/'),
                   dueDateList         = dueDate.split('/'),
-                  startDateObj        = new Date(startDateList[2] + '-' + startDateList[1] + '-' + startDateList[0]),
-                  dueDateObj          = new Date(dueDateList[2] + '-' + dueDateList[1] + '-' + dueDateList[0]),
+                  startDateFormatted  = startDateList[2] + '-' + startDateList[1] + '-' + startDateList[0],
+                  endDateFormatted    = dueDateList[2] + '-' + dueDateList[1] + '-' + dueDateList[0],
+                  startDateObj        = new Date(startDateFormatted),
+                  dueDateObj          = new Date(endDateFormatted),
                   startDateOfWeek     = startDateObj.getDay(),
                   duetDateOfWeek      = dueDateObj.getDay(),
                   startDateOfWeekText = self.convertDayOfMonthToText(startDateOfWeek),
                   dueDateOfWeekText   = self.convertDayOfMonthToText(duetDateOfWeek),
-                  classStartDate      = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
-                  classDueDate        = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : ''
+                  classStartDay       = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
+                  classDueDay         = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : '',
+                  classDueDate        = (statusText === 'In Progress' && (
+                      now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() >
+                      dueDateObj.getFullYear() + '-' + dueDateObj.getMonth() + '-' + dueDateObj.getDate()
+                  )) ? 'danger' : ''
             ;
 
             elTr
                 .find('.start-date')
-                .html('<span class="' + classStartDate + '">(' + startDateOfWeekText + ')</span> ' + startDate)
+                .html('<span class="' + classStartDay + '">(' + startDateOfWeekText + ')</span> ' + startDate)
                 .end()
                 .find('.due-date')
-                .html('<span class="' + classDueDate + '">(' + dueDateOfWeekText + ')</span> ' + dueDate);
+                .addClass(classDueDate)
+                .html('<span class="' + classDueDay + '">(' + dueDateOfWeekText + ')</span> ' + dueDate);
         });
     });
 };
@@ -485,8 +495,6 @@ RedminePlus.prototype.getDetailSubTask = function () {
 $(function () {
 
     var redminePlus = new RedminePlus();
-
-    console.log(redminePlus);
 
     $(window).on('hashchange', function () {
         redminePlus.updateNoteNumber();
