@@ -1,5 +1,12 @@
 'use strict';
 
+import jQuery from 'jquery';
+
+window.$ = window.jQuery = jQuery;
+
+require('select2');
+require('jquery-ui');
+
 var RedminePlus = function () {
     this.elHistory         = $('#history');
     this.elNotePlus        = null;
@@ -26,7 +33,7 @@ var RedminePlus = function () {
 
     // do function
     this.listeningNoteUpdate();
-    this.getDetailSubTask();
+    this.addButtonGetInfoSubTask();
 };
 
 RedminePlus.prototype.createNotePlus = function () {
@@ -161,8 +168,6 @@ RedminePlus.prototype.updatePosition = function () {
     var self     = this,
         position = self.elNotePlus.position()
     ;
-
-    console.info(position);
 
     chrome.storage.sync.set({position: position});
 };
@@ -405,6 +410,36 @@ RedminePlus.prototype.listeningNoteUpdate = function () {
     });
 };
 
+/**
+ * Add button get details of sub tasks
+ */
+RedminePlus.prototype.addButtonGetInfoSubTask = function () {
+    let getSubTaskClass = '';
+
+    if (!$('#issue_tree .list.issues > tbody > tr').length) {
+        getSubTaskClass = 'disabled';
+    }
+
+    $('#issue_tree .contextual')
+        .append('' +
+            '<a href="javascript:void(0)" class="get-sub-detail red-btn-link ' + getSubTaskClass + '">' +
+            '   <i class="fa fa-get-pocket" aria-hidden="true"></i>' +
+            '   Get details of sub tasks' +
+            '</a>'
+        )
+        .find('a')
+        .addClass('red-btn-link')
+        .end()
+        .find('a:first-child')
+        .prepend('<i class="fa fa-plus" aria-hidden="true"></i>\n');
+
+    const self = this;
+
+    $('body').on('click', '.get-sub-detail:not(.disabled)', function () {
+        self.getDetailSubTask();
+    });
+};
+
 RedminePlus.prototype.convertDayOfMonthToText = function (day) {
     if (isNaN(day)) {
         return '';
@@ -431,30 +466,62 @@ RedminePlus.prototype.convertDayOfMonthToText = function (day) {
 };
 
 RedminePlus.prototype.getDetailSubTask = function () {
-    const self = this;
+    const self               = this,
+          elGetDetailSubTask = $('.get-sub-detail'),
+          listTask           = $('#issue_tree .list.issues > tbody > tr'),
+          countTask          = listTask.length
+    ;
+    let countAjaxCompleted   = 0;
 
-    $('#issue_tree .list.issues > tbody > tr').each(function () {
-        const elTr       = $(this),
-              elSubject  = elTr.find('.subject'),
-              linkTask   = elSubject.find('a').attr('href'),
-              elStatus   = elSubject.next(),
-              statusText = elStatus.text(),
-              now        = new Date()
+    elGetDetailSubTask
+        .addClass('disabled')
+        .find('.fa')
+        .removeClass('fa-get-pocket')
+        .addClass('fa-refresh fa-spin')
+    ;
+
+    listTask.each(function () {
+        const elTr        = $(this),
+              elSubject   = elTr.find('.subject'),
+              linkTask    = elSubject.find('a').attr('href'),
+              elStatus    = elSubject.next(),
+              statusText  = elStatus.text(),
+              now         = new Date(),
+              elStartDate = elTr.find('.start-date'),
+              elDueDate   = elTr.find('.due-date'),
+              textLoading = '----Loading----'
         ;
 
-        elSubject
-            .next()
-            .next()
-            .after('' +
-                '<td class="start-date">----Loading----</td>' +
-                '<td class="due-date">----Loading----</td>'
-            );
+        if (!elStartDate.length) {
+            elSubject
+                .next()
+                .next()
+                .after('' +
+                    '<td class="start-date">' + textLoading + '</td>' +
+                    '<td class="due-date">' + textLoading + '</td>'
+                )
+            ;
+        } else {
+            elStartDate.text(textLoading);
+            elDueDate.text(textLoading);
+        }
 
         $.ajax({
             url     : linkTask,
             type    : 'get',
             dataType: 'html'
         }).done(function (response) {
+            countAjaxCompleted++;
+
+            if (countAjaxCompleted === countTask) {
+                elGetDetailSubTask
+                    .removeClass('disabled')
+                    .find('.fa')
+                    .addClass('fa-get-pocket')
+                    .removeClass('fa-refresh fa-spin')
+                ;
+            }
+
             const html                = $(response),
                   elStartDate         = html.find('.start-date:last-child'),
                   elDueDate           = html.find('.due-date:last-child'),
@@ -484,7 +551,8 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .end()
                 .find('.due-date')
                 .addClass(classDueDate)
-                .html('<span class="' + classDueDay + '">(' + dueDateOfWeekText + ')</span> ' + dueDate);
+                .html('<span class="' + classDueDay + '">(' + dueDateOfWeekText + ')</span> ' + dueDate)
+            ;
         });
     });
 };

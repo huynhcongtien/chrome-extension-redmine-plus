@@ -1,3 +1,5 @@
+@import '../css/font-awesome.css';
+
 .note-plus {
     position: fixed;
     right: 0;
@@ -192,4 +194,18 @@ textarea.red-form-control {
     .danger {
         background-color: #ff6464;
     }
+}
+.red-btn-link {
+    padding: 5px;
+    border-radius: 3px;
+    background-color: #628DB6;
+    color: #fff !important;
+    &:hover {
+        background-color: #507AAA !important;
+        text-decoration: none;
+    }
+}
+*.disabled {
+    cursor: not-allowed;
+    opacity: .7;
 }
