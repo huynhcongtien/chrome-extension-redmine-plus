@@ -5,7 +5,7 @@ const common                 = require('./webpack.common.js');
 
 module.exports = merge(common, {
     mode        : 'development',
-    devtool     : 'inline-source-map',
+    devtool     : 'source-map',
     watch       : true, // Set to false to keep the grunt process alive
     watchOptions: {
         aggregateTimeout: 500

@@ -11,7 +11,6 @@
     "background": {
         "scripts": []
     },
-    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
     "permissions": [
         "alarms",
         "notifications",
@@ -26,10 +25,10 @@
                 "*://mid-dev-redmine.fraise.jp/*"
             ],
             "js": [
-                "assets/js/content-script.js"
+                "assets/js/content.js"
             ],
             "css": [
-                "assets/css/content-script.css"
+                "assets/css/content.css"
             ],
             "run_at": "document_end",
             "all_frames": false

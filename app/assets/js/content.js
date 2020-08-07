@@ -12,6 +12,7 @@ var RedminePlus = function () {
     this.elHistory         = $('#history');
     this.elNotePlus        = null;
     this.elNoteNumber      = null;
+    this.noteId            = this.getNoteId();
     this.noteNumberCurrent = '';
     this.noteNumberMax     = $('#history .journal').length;
     // this.directionClass = 'direction';
@@ -35,6 +36,19 @@ var RedminePlus = function () {
     // do function
     this.listeningNoteUpdate();
     this.addButtonGetInfoSubTask();
+    this.createLinkLogTimeOnWorkTime();
+};
+
+RedminePlus.prototype.getNoteId = function () {
+    const currentLink = window.location.href,
+          findId      = currentLink.match(/issues\/(\d+)/)
+    ;
+
+    if (findId) {
+        return findId[1];
+    }
+
+    return null;
 };
 
 RedminePlus.prototype.createNotePlus = function () {
@@ -486,15 +500,16 @@ RedminePlus.prototype.getDetailSubTask = function () {
     ;
 
     listTask.each(function () {
-        const elTr        = $(this),
-              elSubject   = elTr.find('.subject'),
-              linkTask    = elSubject.find('a').attr('href'),
-              elStatus    = elSubject.next(),
-              statusText  = elStatus.text(),
-              now         = new Date(),
-              elStartDate = elTr.find('.start-date'),
-              elDueDate   = elTr.find('.due-date'),
-              textLoading = '----Loading----'
+        const elTr             = $(this),
+              elSubject        = elTr.find('.subject'),
+              linkTask         = elSubject.find('a').attr('href'),
+              elStatus         = elSubject.next(),
+              statusText       = elStatus.text(),
+              now              = new Date(),
+              elEstimatedHours = elTr.find('.estimated-hours'),
+              elStartDate      = elTr.find('.start-date'),
+              elDueDate        = elTr.find('.due-date'),
+              textLoading      = '----Loading----'
         ;
 
         if (!elStartDate.length) {
@@ -502,13 +517,15 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .next()
                 .next()
                 .after('' +
+                    '<td class="estimated-hours">' + textLoading + '</td>' +
                     '<td class="start-date">' + textLoading + '</td>' +
                     '<td class="due-date">' + textLoading + '</td>'
                 )
             ;
         } else {
+            elEstimatedHours.text(textLoading);
             elStartDate.text(textLoading);
-            elDueDate.text(textLoading);
+            elDueDate.text(textLoading).removeClass('danger');
         }
 
         $.ajax({
@@ -530,6 +547,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
             const html                = $(response),
                   elStartDate         = html.find('.start-date:last-child'),
                   elDueDate           = html.find('.due-date:last-child'),
+                  estimatedHours      = html.find('.estimated-hours:last-child').text(),
                   startDate           = elStartDate.text(),
                   dueDate             = elDueDate.text(),
                   startDateList       = startDate.split('/'),
@@ -545,12 +563,21 @@ RedminePlus.prototype.getDetailSubTask = function () {
                   classStartDay       = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
                   classDueDay         = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : '',
                   classDueDate        = (statusText === 'In Progress' && (
-                      now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate() >
-                      dueDateObj.getFullYear() + '-' + dueDateObj.getMonth() + '-' + dueDateObj.getDate()
+                      (
+                          now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') +
+                          now.getMonth() + '-' + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                      ) >
+                      (
+                          dueDateObj.getFullYear() + '-' + (dueDateObj.getMonth() < 10 ? '0' : '') +
+                          dueDateObj.getMonth() + '-' + (dueDateObj.getDate() < 10 ? '0' : '') + dueDateObj.getDate()
+                      )
                   )) ? 'danger' : ''
             ;
 
             elTr
+                .find('.estimated-hours')
+                .html(estimatedHours)
+                .end()
                 .find('.start-date')
                 .html('<span class="' + classStartDay + '">(' + startDateOfWeekText + ')</span> ' + startDate)
                 .end()
@@ -559,6 +586,69 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .html('<span class="' + classDueDay + '">(' + dueDateOfWeekText + ')</span> ' + dueDate)
             ;
         });
+    });
+};
+
+RedminePlus.prototype.createLinkLogTimeOnWorkTime = function () {
+    if (!$('.controller-work_time').length) {
+        return;
+    }
+
+    const elTableMonthlyReport = $('input[value="data download"]').prev('table'),
+          elList               = elTableMonthlyReport.find('tbody tr td:first-child'),
+          elHref               = elList.find('a')
+    ;
+
+    elHref.each(function () {
+        console.log($(this));
+    });
+};
+
+RedminePlus.prototype.addClassForInputs = function (content) {
+    content
+        .find('input:not(:submit,:button, :checkbox), textarea')
+        .addClass('red-form-control')
+        .end()
+        .find('input:submit')
+        .addClass('red-btn red-btn-sm red-btn-primary')
+        .end()
+        .find('input:button')
+        .addClass('red-btn red-btn-sm red-btn-secondary')
+    ;
+};
+
+RedminePlus.prototype.updateIssueFrom = function (url) {
+    const self = this;
+
+    $.ajax({
+        url    : url,
+        type   : 'post',
+        data   : $('#issue-form').serialize(),
+        success: function () {
+            const content = $('#all_attributes');
+
+            content
+                .find('select')
+                .select2({
+                    width: 'resolve'
+                })
+            ;
+
+            self.addClassForInputs(content);
+            self.addClassForLabel();
+        }
+    });
+};
+
+RedminePlus.prototype.addClassForLabel = function () {
+    $('.red-form-control, .select2-hidden-accessible').each(function () {
+        var elInput = $(this),
+            elLabel = elInput.prev()
+        ;
+
+        if (elLabel.length) {
+            elLabel.addClass('red-label-control');
+        }
     });
 };
 
@@ -577,7 +667,8 @@ $(function () {
     //     '#new-relation-form, #issue-form, #my_account_form, #filters-table, .add-filter,' +
     //     '#query_form, #tab-content-info, #content'
     // )
-    $('#update, #new_time_entry, #issue-form, .edit_time_entry')
+
+    $('#update, #new_time_entry, #issue-form, .edit_time_entry, #time_input_table, #quick-search, .controller-search')
         .find('select')
         .each(function () {
             var elSelect = $(this);
@@ -588,24 +679,26 @@ $(function () {
         .end()
         .each(function () {
             var elContent = $(this);
-
-            elContent
-                .find('input:not(:submit,:button, :checkbox), textarea')
-                .addClass('red-form-control')
-                .end()
-                .find('input:submit')
-                .addClass('red-btn red-btn-sm red-btn-primary')
-                .end()
-                .find('input:button')
-                .addClass('red-btn red-btn-sm red-btn-secondary')
-            ;
+            redminePlus.addClassForInputs(elContent);
         })
     ;
 
-    $('[name="datepicker"]').addClass('red-form-control');
-    $('[name="project_id"], [name="meeting_rooms"]').select2({
-        width: 'resolve'
+    $('#project_quick_jump_box').on('change', function () {
+        const href           = $(this).val();
+        window.location.href = window.location.origin + href;
     });
+
+    $('body').on('change', '#issue_tracker_id', function () {
+        const link = '/projects/beer/issues/update_form.js' + (redminePlus.noteId ? ('?id=' + redminePlus.noteId) : '');
+        redminePlus.updateIssueFrom(link);
+    });
+
+
+    //$('[name="datepicker"]').addClass('red-form-control');
+
+    // $('[name="project_id"], [name="meeting_rooms"]').select2({
+    //     width: 'resolve'
+    // });
 
     $('.contextual .icon-edit').click(function () {
         $('#update select')
@@ -616,15 +709,7 @@ $(function () {
         ;
     });
 
-    $('.red-form-control, .select2-hidden-accessible').each(function () {
-        var elInput = $(this),
-            elLabel = elInput.prev()
-        ;
-
-        if (elLabel.length) {
-            elLabel.addClass('red-label-control');
-        }
-    });
+    redminePlus.addClassForLabel();
 
     // change style of text for code
     $('.editable').each(function () {

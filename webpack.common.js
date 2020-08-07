@@ -1,7 +1,5 @@
 const webpack                    = require('webpack');
-// const webpackDashboard           = require('webpack-dashboard/plugin');
 const path                       = require('path');
-const isDevelopment              = process.env.NODE_ENV === 'development';
 const MiniCssExtractPlugin       = require('mini-css-extract-plugin');
 const {CleanWebpackPlugin}       = require('clean-webpack-plugin');
 const CopyPlugin                 = require('copy-webpack-plugin');
@@ -11,10 +9,10 @@ const TerserPlugin               = require('terser-webpack-plugin');
 
 module.exports = {
     entry: {
-        background      : './app/assets/js/background.js',
-        'content-script': [
-            './app/assets/sass/content-script.scss',
-            './app/assets/js/content-script.js'
+        background: './app/assets/js/background.js',
+        content   : [
+            './app/assets/sass/content.scss',
+            './app/assets/js/content.js'
         ]
     },
 
@@ -33,15 +31,11 @@ module.exports = {
                     {
                         loader : 'css-loader',
                         options: {
-                            modules  : false,
-                            sourceMap: isDevelopment
+                            modules: false
                         }
                     },
                     {
-                        loader : 'sass-loader',
-                        options: {
-                            sourceMap: isDevelopment
-                        }
+                        loader: 'sass-loader'
                     }
                 ]
             }
@@ -59,7 +53,6 @@ module.exports = {
             verbose                : true,  // Write Logs to Console
             cleanStaleWebpackAssets: false  // Automatically remove all unused webpack assets on rebuild
         }),
-        // new webpackDashboard(),
         new webpack.ProvidePlugin({
             $              : 'jquery',
             jQuery         : 'jquery',
