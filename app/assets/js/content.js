@@ -545,6 +545,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
             }
 
             const html                = $(response),
+                  subject             = html.find('.details .subject h3').text(),
                   elStartDate         = html.find('.start-date:last-child'),
                   elDueDate           = html.find('.due-date:last-child'),
                   estimatedHours      = html.find('.estimated-hours:last-child').text(),
@@ -574,7 +575,12 @@ RedminePlus.prototype.getDetailSubTask = function () {
                   )) ? 'danger' : ''
             ;
 
+            const htmlSubjectTask = elTr.find('.subject a')[0].outerHTML;
+
             elTr
+                .find('.subject')
+                .html(htmlSubjectTask + ': ' + subject)
+                .end()
                 .find('.estimated-hours')
                 .html(estimatedHours)
                 .end()
