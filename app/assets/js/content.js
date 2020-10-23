@@ -374,10 +374,14 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
         },
         callbacks: {
             beforeOpen: function () {
-                self.elNotePlus.hide();
+                if (self.elNotePlus && self.elNotePlus.length) {
+                    self.elNotePlus.hide();
+                }
             },
             close     : function () {
-                self.elNotePlus.show();
+                if (self.elNotePlus && self.elNotePlus.length) {
+                    self.elNotePlus.show();
+                }
             }
         }
     }, index);
