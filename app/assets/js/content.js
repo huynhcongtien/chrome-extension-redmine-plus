@@ -28,7 +28,9 @@ var RedminePlus = function () {
 
     chrome.storage.sync.get(storageVars, function (storage) {
         self.storage = storage;
+        self.getNoteNumberCurrent();
         self.createNotePlus();
+        self.highlightCurrentNote();
         self.disableDirection();
         self.popupImage();
     });
@@ -57,8 +59,6 @@ RedminePlus.prototype.createNotePlus = function () {
     if (!self.elHistory.length) {
         return;
     }
-
-    self.getNoteNumberCurrent();
 
     var notePlus = '' +
         '<div class="note-plus">' +
@@ -235,6 +235,7 @@ RedminePlus.prototype.updateNoteNumber = function () {
     var self = this;
 
     self.getNoteNumberCurrent();
+    self.highlightCurrentNote();
     self.elNoteNumber.val(self.noteNumberCurrent);
 };
 
@@ -486,6 +487,16 @@ RedminePlus.prototype.convertDayOfMonthToText = function (day) {
             return 'Sat';
 
     }
+};
+
+RedminePlus.prototype.highlightCurrentNote = function () {
+    const self          = this,
+          elCurrentNote = $('#note-' + self.noteNumberCurrent).closest('.journal')
+    ;
+
+    $('#history .journal').removeClass('selected');
+
+    elCurrentNote.addClass('selected');
 };
 
 RedminePlus.prototype.getDetailSubTask = function () {
