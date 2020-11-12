@@ -490,9 +490,16 @@ RedminePlus.prototype.convertDayOfMonthToText = function (day) {
 };
 
 RedminePlus.prototype.highlightCurrentNote = function () {
-    const self          = this,
-          elCurrentNote = $('#note-' + self.noteNumberCurrent).closest('.journal')
-    ;
+    const self        = this;
+    let elCurrentNote = $('#note-' + self.noteNumberCurrent).closest('.journal');
+
+    if (!self.noteNumberCurrent) {
+        const resultRegex = /#(change-\d+)/.exec(window.location.href);
+
+        if (resultRegex) {
+            elCurrentNote = $('#' + resultRegex[1]);
+        }
+    }
 
     $('#history .journal').removeClass('selected');
 
@@ -517,7 +524,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
     listTask.each(function () {
         const elTr             = $(this),
               elSubject        = elTr.find('.subject'),
-              linkTask         = elSubject.find('a').attr('href'),
+              issueId          = elTr.find('.checkbox input').val(),
               elStatus         = elSubject.next(),
               statusText       = elStatus.text(),
               now              = new Date(),
@@ -544,9 +551,9 @@ RedminePlus.prototype.getDetailSubTask = function () {
         }
 
         $.ajax({
-            url     : linkTask,
+            url     : window.location.origin + '/issues/' + issueId + '.json',
             type    : 'get',
-            dataType: 'html'
+            dataType: 'json'
         }).done(function (response) {
             countAjaxCompleted++;
 
@@ -559,19 +566,13 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 ;
             }
 
-            const html                = $(response),
-                  subject             = html.find('.details .subject h3').text(),
-                  elStartDate         = html.find('.start-date:last-child'),
-                  elDueDate           = html.find('.due-date:last-child'),
-                  estimatedHours      = html.find('.estimated-hours:last-child').text(),
-                  startDate           = elStartDate.text(),
-                  dueDate             = elDueDate.text(),
-                  startDateList       = startDate.split('/'),
-                  dueDateList         = dueDate.split('/'),
-                  startDateFormatted  = startDateList[2] + '-' + startDateList[1] + '-' + startDateList[0],
-                  endDateFormatted    = dueDateList[2] + '-' + dueDateList[1] + '-' + dueDateList[0],
-                  startDateObj        = new Date(startDateFormatted),
-                  dueDateObj          = new Date(endDateFormatted),
+            const issueData           = response.issue,
+                  subject             = issueData.subject,
+                  estimatedHours      = issueData.estimated_hours || '-',
+                  startDate           = issueData.start_date,
+                  dueDate             = issueData.due_date,
+                  startDateObj        = new Date(issueData.start_date),
+                  dueDateObj          = new Date(issueData.due_date),
                   startDateOfWeek     = startDateObj.getDay(),
                   duetDateOfWeek      = dueDateObj.getDay(),
                   startDateOfWeekText = self.convertDayOfMonthToText(startDateOfWeek),
@@ -741,5 +742,36 @@ $(function () {
 
         elEditable.html(textNew);
     });
+
+    // Get the header
+    const elSubject = $('#content .subject h3');
+
+    if (elSubject.length) {
+        const headerOffsetLeft = elSubject.offset().left - 10,
+              sticky           = elSubject.offset().top
+        ;
+
+        // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+        function stickySubject() {
+            if (window.pageYOffset > sticky) {
+                elSubject.css('left', headerOffsetLeft + 'px ');
+                elSubject
+                    .closest('.issue')
+                    .addClass('sticky')
+                ;
+            } else {
+                elSubject.css('left', '');
+                elSubject
+                    .closest('.issue')
+                    .removeClass('sticky')
+                ;
+            }
+        }
+
+        // When the user scrolls the page, execute myFunction
+        window.onscroll = function () {
+            stickySubject();
+        };
+    }
 
 });
