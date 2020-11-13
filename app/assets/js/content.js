@@ -570,26 +570,37 @@ RedminePlus.prototype.getDetailSubTask = function () {
                   subject             = issueData.subject,
                   estimatedHours      = issueData.estimated_hours || '-',
                   startDate           = issueData.start_date,
-                  dueDate             = issueData.due_date,
                   startDateObj        = new Date(issueData.start_date),
-                  dueDateObj          = new Date(issueData.due_date),
                   startDateOfWeek     = startDateObj.getDay(),
-                  duetDateOfWeek      = dueDateObj.getDay(),
                   startDateOfWeekText = self.convertDayOfMonthToText(startDateOfWeek),
-                  dueDateOfWeekText   = self.convertDayOfMonthToText(duetDateOfWeek),
-                  classStartDay       = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : '',
-                  classDueDay         = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : '',
-                  classDueDate        = (statusText === 'In Progress' && (
-                      (
-                          now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') +
-                          now.getMonth() + '-' + (now.getDate() < 10 ? '0' : '') + now.getDate()
-                      ) >
-                      (
-                          dueDateObj.getFullYear() + '-' + (dueDateObj.getMonth() < 10 ? '0' : '') +
-                          dueDateObj.getMonth() + '-' + (dueDateObj.getDate() < 10 ? '0' : '') + dueDateObj.getDate()
-                      )
-                  )) ? 'danger' : ''
+                  classStartDay       = (startDateOfWeek === 0 || startDateOfWeek === 6) ? 'warn' : ''
             ;
+
+            let dueDateOfWeekText = '-',
+                classDueDay       = '',
+                classDueDate      = '',
+                dueDate           = ''
+            ;
+
+            if (issueData.due_date) {
+                const dueDateObj     = new Date(issueData.due_date),
+                      duetDateOfWeek = dueDateObj.getDay()
+                ;
+
+                dueDate           = issueData.due_date;
+                dueDateOfWeekText = '(' + self.convertDayOfMonthToText(duetDateOfWeek) + ')';
+                classDueDay       = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : '';
+                classDueDate      = (statusText === 'In Progress' && (
+                    (
+                        now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') +
+                        now.getMonth() + '-' + (now.getDate() < 10 ? '0' : '') + now.getDate()
+                    ) >
+                    (
+                        dueDateObj.getFullYear() + '-' + (dueDateObj.getMonth() < 10 ? '0' : '') +
+                        dueDateObj.getMonth() + '-' + (dueDateObj.getDate() < 10 ? '0' : '') + dueDateObj.getDate()
+                    )
+                )) ? 'danger' : '';
+            }
 
             const htmlSubjectTask = elTr.find('.subject a')[0].outerHTML;
 
@@ -605,7 +616,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .end()
                 .find('.due-date')
                 .addClass(classDueDate)
-                .html('<span class="' + classDueDay + '">(' + dueDateOfWeekText + ')</span> ' + dueDate)
+                .html('<span class="' + classDueDay + '">' + dueDateOfWeekText + '</span> ' + dueDate)
             ;
         });
     });
