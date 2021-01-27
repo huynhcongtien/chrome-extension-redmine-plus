@@ -701,7 +701,7 @@ $(function () {
     //     '#query_form, #tab-content-info, #content'
     // )
 
-    $('#update, #new_time_entry, #issue-form, .edit_time_entry, #time_input_table, #quick-search, .controller-search')
+    $('#update, #new_time_entry, #issue-form, .edit_time_entry, #quick-search, .controller-search')
         .find('select')
         .each(function () {
             var elSelect = $(this);
@@ -783,6 +783,13 @@ $(function () {
         window.onscroll = function () {
             stickySubject();
         };
+    }
+
+    // auto scroll to bottom of attachments
+    const elAttachments = $('.attachments');
+
+    if (elAttachments.length) {
+        elAttachments.scrollTop(elAttachments.height() + 50);
     }
 
 });
