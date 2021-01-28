@@ -528,10 +528,12 @@ RedminePlus.prototype.getDetailSubTask = function () {
               elStatus         = elSubject.next(),
               statusText       = elStatus.text(),
               now              = new Date(),
+              elSpentHours     = elTr.find('.spent-hours'),
               elEstimatedHours = elTr.find('.estimated-hours'),
               elStartDate      = elTr.find('.start-date'),
               elDueDate        = elTr.find('.due-date'),
-              textLoading      = '----Loading----'
+              textLoading      = '---Loading---',
+              textLoadingSmall = '---'
         ;
 
         if (!elStartDate.length) {
@@ -539,13 +541,15 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .next()
                 .next()
                 .after('' +
-                    '<td class="estimated-hours">' + textLoading + '</td>' +
+                    '<td class="spent-hours">' + textLoadingSmall + '</td>' +
+                    '<td class="estimated-hours">' + textLoadingSmall + '</td>' +
                     '<td class="start-date">' + textLoading + '</td>' +
                     '<td class="due-date">' + textLoading + '</td>'
                 )
             ;
         } else {
-            elEstimatedHours.text(textLoading);
+            elSpentHours.text(textLoadingSmall);
+            elEstimatedHours.text(textLoadingSmall);
             elStartDate.text(textLoading);
             elDueDate.text(textLoading).removeClass('danger');
         }
@@ -568,6 +572,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
 
             const issueData           = response.issue,
                   subject             = issueData.subject,
+                  spentHours          = issueData.spent_hours || '-',
                   estimatedHours      = issueData.estimated_hours || '-',
                   startDate           = issueData.start_date,
                   startDateObj        = new Date(issueData.start_date),
@@ -607,6 +612,9 @@ RedminePlus.prototype.getDetailSubTask = function () {
             elTr
                 .find('.subject')
                 .html(htmlSubjectTask + ': ' + subject)
+                .end()
+                .find('.spent-hours')
+                .html(spentHours)
                 .end()
                 .find('.estimated-hours')
                 .html(estimatedHours)
