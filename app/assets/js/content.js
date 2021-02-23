@@ -39,6 +39,7 @@ var RedminePlus = function () {
     this.listeningNoteUpdate();
     this.addButtonGetInfoSubTask();
     this.createLinkLogTimeOnWorkTime();
+    this.issueList();
 };
 
 RedminePlus.prototype.getNoteId = function () {
@@ -509,6 +510,7 @@ RedminePlus.prototype.highlightCurrentNote = function () {
 RedminePlus.prototype.getDetailSubTask = function () {
     const self               = this,
           elGetDetailSubTask = $('.get-sub-detail'),
+          elListIssues       = $('#issue_tree .list.issues'),
           listTask           = $('#issue_tree .list.issues > tbody > tr'),
           countTask          = listTask.length
     ;
@@ -521,6 +523,23 @@ RedminePlus.prototype.getDetailSubTask = function () {
         .addClass('fa-refresh fa-spin')
     ;
 
+    if (!elListIssues.find('thead').length) {
+        elListIssues.prepend(
+            '<thead>' +
+            '   <tr>' +
+            '       <th>Subject</th>' +
+            '       <th>Status</th>' +
+            '       <th>Assignee</th>' +
+            '       <th>Estimated time</th>' +
+            '       <th>Spent time</th>' +
+            '       <th>Start date</th>' +
+            '       <th>Due date</th>' +
+            '       <th>% Done</th>' +
+            '   </tr>' +
+            '</thead>'
+        );
+    }
+
     listTask.each(function () {
         const elTr             = $(this),
               elSubject        = elTr.find('.subject'),
@@ -528,8 +547,8 @@ RedminePlus.prototype.getDetailSubTask = function () {
               elStatus         = elSubject.next(),
               statusText       = elStatus.text(),
               now              = new Date(),
-              elSpentHours     = elTr.find('.spent-hours'),
               elEstimatedHours = elTr.find('.estimated-hours'),
+              elSpentHours     = elTr.find('.spent-hours'),
               elStartDate      = elTr.find('.start-date'),
               elDueDate        = elTr.find('.due-date'),
               textLoading      = '---Loading---',
@@ -541,15 +560,15 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .next()
                 .next()
                 .after('' +
-                    '<td class="spent-hours">' + textLoadingSmall + '</td>' +
                     '<td class="estimated-hours">' + textLoadingSmall + '</td>' +
+                    '<td class="spent-hours">' + textLoadingSmall + '</td>' +
                     '<td class="start-date">' + textLoading + '</td>' +
                     '<td class="due-date">' + textLoading + '</td>'
                 )
             ;
         } else {
-            elSpentHours.text(textLoadingSmall);
             elEstimatedHours.text(textLoadingSmall);
+            elSpentHours.text(textLoadingSmall);
             elStartDate.text(textLoading);
             elDueDate.text(textLoading).removeClass('danger');
         }
@@ -613,11 +632,11 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 .find('.subject')
                 .html(htmlSubjectTask + ': ' + subject)
                 .end()
-                .find('.spent-hours')
-                .html(spentHours)
-                .end()
                 .find('.estimated-hours')
                 .html(estimatedHours)
+                .end()
+                .find('.spent-hours')
+                .html(spentHours)
                 .end()
                 .find('.start-date')
                 .html('<span class="' + classStartDay + '">(' + startDateOfWeekText + ')</span> ' + startDate)
@@ -690,6 +709,16 @@ RedminePlus.prototype.addClassForLabel = function () {
         if (elLabel.length) {
             elLabel.addClass('red-label-control');
         }
+    });
+};
+
+RedminePlus.prototype.issueList = function () {
+    if (!$('.controller-issues.action-index').length) {
+        return;
+    }
+
+    $('.list.issues .assigned_to, .list.issues .author').css({
+        'white-space': 'nowrap'
     });
 };
 
@@ -797,7 +826,7 @@ $(function () {
     const elAttachments = $('.attachments');
 
     if (elAttachments.length) {
-        elAttachments.scrollTop(elAttachments.height() + 50);
+        elAttachments.scrollTop(elAttachments[0].scrollHeight);
     }
 
 });

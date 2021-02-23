@@ -252,3 +252,29 @@ textarea.red-form-control {
         margin-top: 42px;
     }
 }
+
+.controller-issues.action-index {
+    .list.issues {
+        tr {
+            &.status-2:not(:hover) { // in progress
+                background-color: #7cbf7c;
+            }
+            &.status-3:not(:hover) { // resolved
+                background: rgba(56, 144, 246, 0.87);
+                color: #fff;
+                a {
+                    color: #ffffff;
+                }
+            }
+            &.status-7:not(:hover) { // pause
+                background-color: #6c757d9e;
+            }
+            &.status-8:not(:hover) { // Assigned
+                background-color: yellow;
+            }
+        }
+        table.progress td.closed {
+            background-color: #67e267
+        }
+    }
+}
