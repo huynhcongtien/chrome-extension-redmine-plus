@@ -614,7 +614,7 @@ RedminePlus.prototype.getDetailSubTask = function () {
                 dueDate           = issueData.due_date;
                 dueDateOfWeekText = '(' + self.convertDayOfMonthToText(duetDateOfWeek) + ')';
                 classDueDay       = (duetDateOfWeek === 0 || duetDateOfWeek === 6) ? 'warn' : '';
-                classDueDate      = (statusText === 'In Progress' && (
+                classDueDate      = ((statusText === 'In Progress' || statusText === 'New') && (
                     (
                         now.getFullYear() + '-' + (now.getMonth() < 10 ? '0' : '') +
                         now.getMonth() + '-' + (now.getDate() < 10 ? '0' : '') + now.getDate()
