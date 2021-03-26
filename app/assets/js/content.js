@@ -450,6 +450,14 @@ RedminePlus.prototype.addButtonGetInfoSubTask = function () {
             '<a href="javascript:void(0)" class="get-sub-detail red-btn-link ' + getSubTaskClass + '">' +
             '   <i class="fa fa-get-pocket" aria-hidden="true"></i>' +
             '   Get details of sub tasks' +
+            '</a>' +
+            '<a href="javascript:void(0)" class="hide-closed-tasks">' +
+            '   <i class="fa fa-eye-slash" aria-hidden="true"></i>' +
+            '   Hide closed tasks' +
+            '</a>' +
+            '<a href="javascript:void(0)" class="show-closed-tasks">' +
+            '   <i class="fa fa-eye" aria-hidden="true"></i>' +
+            '   Show closed tasks' +
             '</a>'
         )
         .find('a')
@@ -460,9 +468,20 @@ RedminePlus.prototype.addButtonGetInfoSubTask = function () {
 
     const self = this;
 
-    $('body').on('click', '.get-sub-detail:not(.disabled)', function () {
-        self.getDetailSubTask();
-    });
+    $('body')
+        .on('click', '.get-sub-detail:not(.disabled)', function () {
+            self.getDetailSubTask();
+        })
+        .on('click', '.hide-closed-tasks', function () {
+            $('.list.issues tr.issue a.closed').closest('tr').hide();
+            $(this).hide();
+            $('.show-closed-tasks').show();
+        })
+        .on('click', '.show-closed-tasks', function () {
+            $('.list.issues tr.issue a.closed').closest('tr').show();
+            $(this).hide();
+            $('.hide-closed-tasks').show();
+        });
 };
 
 RedminePlus.prototype.convertDayOfMonthToText = function (day) {

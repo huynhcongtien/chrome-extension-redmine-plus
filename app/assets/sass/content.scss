@@ -198,16 +198,27 @@ textarea.red-form-control {
     background-color: coral;
     color: #fff;
 }
-#issue_tree .list.issues > tbody > tr {
-    &:hover {
-        background-color: #628DB6;
-        color: #fff;
-        a {
-            color: #fff;
+#issue_tree {
+    .contextual {
+        display: flex;
+        a:not(:last-child) {
+            margin: 0 5px 0 0;
+        }
+        .show-closed-tasks {
+            display: none;
         }
     }
-    .danger {
-        background-color: #ff6464;
+    .list.issues > tbody > tr {
+        &:hover {
+            background-color: #628DB6;
+            color: #fff;
+            a {
+                color: #fff;
+            }
+        }
+        .danger {
+            background-color: #ff6464;
+        }
     }
 }
 .red-btn-link {
