@@ -18,12 +18,11 @@ var RedminePlus = function () {
     // this.directionClass = 'direction';
     this.elDirectionUp     = null;
     this.elDirectionDown   = null;
-    this.input_new_style   = [];
 
-    var self        = this,
-        storageVars = [
-            'position'
-        ]
+    const self        = this,
+          storageVars = [
+              'position'
+          ]
     ;
 
     chrome.storage.sync.get(storageVars, function (storage) {
@@ -40,6 +39,7 @@ var RedminePlus = function () {
     this.addButtonGetInfoSubTask();
     this.createLinkLogTimeOnWorkTime();
     this.issueList();
+    this.tools();
 };
 
 RedminePlus.prototype.getNoteId = function () {
@@ -291,6 +291,16 @@ RedminePlus.prototype.goToTop = function () {
  */
 RedminePlus.prototype.goToBottom = function () {
     $('html, body').animate({scrollTop: $(document).height()}, 'fast');
+};
+
+/**
+ * Go to element
+ * @param element
+ */
+RedminePlus.prototype.goToElement = function (element) {
+    $([document.documentElement, document.body]).animate({
+        scrollTop: element.offset().top
+    }, 200);
 };
 
 /**
@@ -675,11 +685,16 @@ RedminePlus.prototype.createLinkLogTimeOnWorkTime = function () {
 
     const elTableMonthlyReport = $('input[value="data download"]').prev('table'),
           elList               = elTableMonthlyReport.find('tbody tr td:first-child'),
-          elHref               = elList.find('a')
+          elHref               = elList.find('a[popup="true"]')
     ;
 
     elHref.each(function () {
-        console.log($(this));
+        const elLink      = $(this),
+              hrefLogTime = elLink.attr('href') + '/time_entries/new';
+
+        elLink
+            .attr('href', hrefLogTime)
+            .attr('target', '_blank');
     });
 };
 
@@ -739,6 +754,30 @@ RedminePlus.prototype.issueList = function () {
     $('.list.issues .assigned_to, .list.issues .author').css({
         'white-space': 'nowrap'
     });
+};
+
+RedminePlus.prototype.tools = function () {
+    if (!$('#issue_tree').length) {
+        return;
+    }
+
+    const self  = this,
+          tools = '' +
+              '<div class="tools">' +
+              '   <ul class="tool-list">' +
+              '       <li class="tool red-btn-link" data-target="#issue_tree">Go to Subtasks</li>' +
+              '   </ul>' +
+              '</div>' +
+              '';
+
+    $('body')
+        .append(tools)
+        .on('click', '.tools .tool', function () {
+            const elTool = $(this),
+                  target = elTool.data('target');
+
+            self.goToElement($(target));
+        });
 };
 
 /**
@@ -811,35 +850,41 @@ $(function () {
     });
 
     // Get the header
-    const elSubject = $('#content .subject h3');
+    const elSubject      = $('#content .subject h3');
+    let headerOffsetLeft = 0,
+        sticky           = 0;
 
     if (elSubject.length) {
-        const headerOffsetLeft = elSubject.offset().left - 10,
-              sticky           = elSubject.offset().top
-        ;
-
-        // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
-        function stickySubject() {
-            if (window.pageYOffset > sticky) {
-                elSubject.css('left', headerOffsetLeft + 'px ');
-                elSubject
-                    .closest('.issue')
-                    .addClass('sticky')
-                ;
-            } else {
-                elSubject.css('left', '');
-                elSubject
-                    .closest('.issue')
-                    .removeClass('sticky')
-                ;
-            }
-        }
-
-        // When the user scrolls the page, execute myFunction
-        window.onscroll = function () {
-            stickySubject();
-        };
+        headerOffsetLeft = elSubject.offset().left - 10;
+        sticky           = elSubject.offset().top;
     }
+
+    /**
+     * Add the sticky class to the header when you reach its scroll position.
+     * Remove "sticky" when you leave the scroll position
+     */
+    function stickySubject() {
+        if (window.pageYOffset > sticky) {
+            elSubject.css('left', headerOffsetLeft + 'px ');
+            elSubject
+                .closest('.issue')
+                .addClass('sticky')
+            ;
+        } else {
+            elSubject.css('left', '');
+            elSubject
+                .closest('.issue')
+                .removeClass('sticky')
+            ;
+        }
+    }
+
+    stickySubject();
+
+    // When the user scrolls the page, execute myFunction
+    window.onscroll = function () {
+        stickySubject();
+    };
 
     // auto scroll to bottom of attachments
     const elAttachments = $('.attachments');
@@ -847,5 +892,4 @@ $(function () {
     if (elAttachments.length) {
         elAttachments.scrollTop(elAttachments[0].scrollHeight);
     }
-
 });

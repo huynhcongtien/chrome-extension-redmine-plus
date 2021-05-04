@@ -1,7 +1,8 @@
-const merge                  = require('webpack-merge');
-const LiveReloadPlugin       = require('webpack-livereload-plugin');
-const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
-const common                 = require('./webpack.common.js');
+const merge                   = require('webpack-merge');
+const LiveReloadPlugin        = require('webpack-livereload-plugin');
+const MergeJsonWebpackPlugin  = require('merge-jsons-webpack-plugin');
+const common                  = require('./webpack.common.js');
+const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 
 module.exports = merge(common, {
     mode        : 'development',
@@ -25,6 +26,13 @@ module.exports = merge(common, {
             ],
             'output': {
                 'fileName': 'manifest.json'
+            }
+        }),
+        new ChromeExtensionReloader({
+            port: 35729,
+            entries: {
+                contentScript: 'content',
+                background   : 'background'
             }
         })
     ]
