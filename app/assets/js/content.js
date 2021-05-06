@@ -811,6 +811,12 @@ $(function () {
         })
     ;
 
+    const elButtonPreviewIssueForm = $('#issue-form [accesskey="r"]');
+
+    if (elButtonPreviewIssueForm.length) {
+        elButtonPreviewIssueForm.addClass('red-btn red-btn-sm red-btn-secondary');
+    }
+
     $('#project_quick_jump_box').on('change', function () {
         const href           = $(this).val();
         window.location.href = window.location.origin + href;
