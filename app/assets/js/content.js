@@ -765,7 +765,10 @@ RedminePlus.prototype.tools = function () {
           tools = '' +
               '<div class="tools">' +
               '   <ul class="tool-list">' +
-              '       <li class="tool red-btn-link" data-target="#issue_tree">Go to Subtasks</li>' +
+              '       <li class="tool red-btn-link" data-target=".description">Description</li>' +
+              '       <li class="tool red-btn-link" data-target=".attachments">Attachments</li>' +
+              '       <li class="tool red-btn-link" data-target="#issue_tree">Subtasks</li>' +
+              '       <li class="tool red-btn-link" data-target="#history">History</li>' +
               '   </ul>' +
               '</div>' +
               '';
@@ -811,10 +814,20 @@ $(function () {
         })
     ;
 
-    const elButtonPreviewIssueForm = $('#issue-form [accesskey="r"]');
+    function setHeightDesc() {
+        $('.description').css({
+            'max-height': ($(window).height() - $('.attachments').height() - 30)
+        });
+    }
 
-    if (elButtonPreviewIssueForm.length) {
-        elButtonPreviewIssueForm.addClass('red-btn red-btn-sm red-btn-secondary');
+    if ($('.issue.details').length) {
+        $('#issue-form [accesskey="r"]').addClass('red-btn red-btn-sm red-btn-secondary');
+        $('.description').after('<hr/>');
+        setHeightDesc();
+
+        $(window).on('resize', function () {
+            setHeightDesc();
+        });
     }
 
     $('#project_quick_jump_box').on('change', function () {
