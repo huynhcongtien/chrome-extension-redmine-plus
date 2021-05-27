@@ -40,6 +40,7 @@ var RedminePlus = function () {
     this.createLinkLogTimeOnWorkTime();
     this.issueList();
     this.tools();
+    this.controllerTimeLog();
 };
 
 RedminePlus.prototype.getNoteId = function () {
@@ -757,19 +758,27 @@ RedminePlus.prototype.issueList = function () {
 };
 
 RedminePlus.prototype.tools = function () {
-    if (!$('#issue_tree').length) {
+    if (!$('.controller-issues.action-show, .controller-issues.action-index').length) {
         return;
+    }
+
+    let toolList = '';
+
+    if ($('.controller-issues.action-show').length) {
+        toolList = '' +
+            '<li class="tool red-btn-link" data-target=".description">Description</li>' +
+            '<li class="tool red-btn-link" data-target=".attachments">Attachments</li>' +
+            '<li class="tool red-btn-link" data-target="#issue_tree">Subtasks</li>' +
+            '<li class="tool red-btn-link" data-target="#history">History</li>';
+    } else if ($('.controller-issues.action-index').length) {
+        toolList = '' +
+            '<li class="tool red-btn-link open-all-issue">Open all issue</li>';
     }
 
     const self  = this,
           tools = '' +
               '<div class="tools">' +
-              '   <ul class="tool-list">' +
-              '       <li class="tool red-btn-link" data-target=".description">Description</li>' +
-              '       <li class="tool red-btn-link" data-target=".attachments">Attachments</li>' +
-              '       <li class="tool red-btn-link" data-target="#issue_tree">Subtasks</li>' +
-              '       <li class="tool red-btn-link" data-target="#history">History</li>' +
-              '   </ul>' +
+              '   <ul class="tool-list">' + toolList + '</ul>' +
               '</div>' +
               '';
 
@@ -779,8 +788,30 @@ RedminePlus.prototype.tools = function () {
             const elTool = $(this),
                   target = elTool.data('target');
 
-            self.goToElement($(target));
+            if (target) {
+                self.goToElement($(target));
+            }
+
+            if (elTool.hasClass('open-all-issue')) {
+                $('.list.issues .id a').each(function () {
+                    const issueLink = $(this).attr('href');
+                    window.open(issueLink, '_blank');
+                });
+            }
         });
+};
+
+RedminePlus.prototype.controllerTimeLog = function () {
+    if (!$('.controller-timelog').length) {
+        return;
+    }
+
+    const issueId   = $('#time_entry_issue_id').val(),
+          elSubject = $('#time_entry_issue'),
+          subject   = elSubject.text(),
+          issueLink = 'https://redmine.lampart-vn.com/issues/' + issueId;
+
+    elSubject.html('<a href="' + issueLink + '">' + subject + '</a>');
 };
 
 /**
@@ -814,20 +845,20 @@ $(function () {
         })
     ;
 
-    function setHeightDesc() {
-        $('.description').css({
-            'max-height': ($(window).height() - $('.attachments').height() - 30)
-        });
-    }
+    // function setHeightDesc() {
+    //     $('.description').css({
+    //         'max-height': ($(window).height() - $('.attachments').height() - 30)
+    //     });
+    // }
 
     if ($('.issue.details').length) {
         $('#issue-form [accesskey="r"]').addClass('red-btn red-btn-sm red-btn-secondary');
         $('.description').after('<hr/>');
-        setHeightDesc();
+        // setHeightDesc();
 
-        $(window).on('resize', function () {
-            setHeightDesc();
-        });
+        // $(window).on('resize', function () {
+        //     setHeightDesc();
+        // });
     }
 
     $('#project_quick_jump_box').on('change', function () {
