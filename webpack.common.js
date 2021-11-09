@@ -25,18 +25,14 @@ module.exports = {
     module      : {
         rules: [
             {
-                test  : /\.(sa|sc|c)ss$/,
-                loader: [
+                test: /\.s[ac]ss$/i,
+                use : [
+                    // Creates `style` nodes from JS strings
                     MiniCssExtractPlugin.loader,
-                    {
-                        loader : 'css-loader',
-                        options: {
-                            modules: false
-                        }
-                    },
-                    {
-                        loader: 'sass-loader'
-                    }
+                    // Translates CSS into CommonJS
+                    'css-loader',
+                    // Compiles Sass to CSS
+                    'sass-loader'
                 ]
             }
         ]
@@ -79,6 +75,10 @@ module.exports = {
                 {
                     from: 'app/assets/fonts',
                     to  : 'assets/fonts'
+                },
+                {
+                    from: 'app/manifest',
+                    to: ''
                 }
             ]
         })

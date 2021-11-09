@@ -9,7 +9,9 @@
     },
     "default_locale": "en",
     "background": {
-        "scripts": []
+        "scripts": [
+            "assets/js/background.js"
+        ]
     },
     "permissions": [
         "alarms",

@@ -1,35 +1,18 @@
-const merge                   = require('webpack-merge');
-const LiveReloadPlugin        = require('webpack-livereload-plugin');
-const MergeJsonWebpackPlugin  = require('merge-jsons-webpack-plugin');
+const {merge}                 = require('webpack-merge');
 const common                  = require('./webpack.common.js');
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader');
 
 module.exports = merge(common, {
     mode        : 'development',
-    devtool     : 'source-map',
+    devtool     : 'eval-source-map',
     watch       : true, // Set to false to keep the grunt process alive
     watchOptions: {
         aggregateTimeout: 500
         // poll: true // Use this when you need to fallback to poll based watching (webpack 1.9.1+ only)
     },
-    entry       : {
-        'chrome-reload': './app/assets/js/chrome-reload.js'
-    },
     plugins     : [
-        new LiveReloadPlugin({
-            port: 35729
-        }),
-        new MergeJsonWebpackPlugin({
-            'files' : [
-                './app/manifest/manifest_common.json',
-                './app/manifest/manifest_dev.json'
-            ],
-            'output': {
-                'fileName': 'manifest.json'
-            }
-        }),
         new ChromeExtensionReloader({
-            port: 35729,
+            port   : 35729,
             entries: {
                 contentScript: 'content',
                 background   : 'background'
