@@ -35,7 +35,6 @@ var RedminePlus = function () {
     });
 
     // do function
-    this.listeningNoteUpdate();
     this.addButtonGetInfoSubTask();
     this.createLinkLogTimeOnWorkTime();
     this.issueList();
@@ -402,47 +401,6 @@ RedminePlus.prototype.openPopupImg = function (listImg, index) {
     // event close image popup when click on link of image
     $('body').on('click', '.ref-link-note', function () {
         $.magnificPopup.close();
-    });
-};
-
-RedminePlus.prototype.listeningNoteUpdate = function () {
-    let target         = $('.journal'),
-        // Options for the observer (which mutations to observe)
-        observerConfig = {childList: true},
-        observer       = []
-    ;
-
-    $.each(target, function (index) {
-        const elJournal = $(this);
-        // create an observer instance
-        observer[index] = new MutationObserver(function (mutationRecordsList) {
-            mutationRecordsList.forEach(function (mutationRecord) {
-                console.log(mutationRecord);
-                if (mutationRecord.addedNodes.length) {
-                    let addedNode         = $(mutationRecord.addedNodes[0]),
-                        elTotalAndBtnCard = addedNode.find('[class^="totalAndSubmit"]')
-                    ;
-
-                    console.log(addedNode);
-
-                    if (!elTotalAndBtnCard.length) {
-                        return true;
-                    }
-                }
-            });
-        })
-        ;
-        // pass in the target node, as well as the observer options
-        observer[index].observe(elJournal[0], observerConfig);
-    });
-
-
-    $('body').on('click', '[accesskey="r"]', function () {
-        // let elPreview = $(this),
-        //     elJournal=elPreview.closest('.journal'),
-        // idJournal=elJournal.
-        // elShowPreview = elForm.find('[id^=journal')
-        // ;
     });
 };
 
