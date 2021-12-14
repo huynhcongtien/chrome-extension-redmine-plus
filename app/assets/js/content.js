@@ -40,6 +40,7 @@ var RedminePlus = function () {
     this.issueList();
     this.tools();
     this.controllerTimeLog();
+    this.addActionReplyNote();
 };
 
 RedminePlus.prototype.getNoteId = function () {
@@ -684,8 +685,7 @@ RedminePlus.prototype.updateIssueFrom = function (url) {
                 .find('select')
                 .select2({
                     width: 'resolve'
-                })
-            ;
+                });
 
             self.addClassForInputs(content);
             self.addClassForLabel();
@@ -695,9 +695,8 @@ RedminePlus.prototype.updateIssueFrom = function (url) {
 
 RedminePlus.prototype.addClassForLabel = function () {
     $('.red-form-control, .select2-hidden-accessible').each(function () {
-        var elInput = $(this),
-            elLabel = elInput.prev()
-        ;
+        const elInput = $(this),
+              elLabel = elInput.prev();
 
         if (elLabel.length) {
             elLabel.addClass('red-label-control');
@@ -773,6 +772,37 @@ RedminePlus.prototype.controllerTimeLog = function () {
 };
 
 /**
+ * Add action reply note
+ */
+RedminePlus.prototype.addActionReplyNote = function () {
+    $('.controller-issues.action-show #history .journal')
+        .each(function () {
+            const elmJournal = $(this);
+
+            elmJournal.find('h4').append(
+                '<a class="reply-note" ' +
+                '   onclick="showAndScrollTo(&quot;update&quot;, &quot;issue_notes&quot;); return false;"' +
+                '><i class="fa fa-reply" aria-hidden="true"></i> Reply</a>'
+            );
+        })
+        .on('click', '.reply-note', function () {
+            $('#update select')
+                .select2('destroy')
+                .select2({
+                    width: 'resolve'
+                });
+
+            // get link note
+            const linkNote     = $(this).parent().find('.journal-link').attr('href'),
+                  linkNoteFull = window.location.origin + linkNote,
+                  linkParts    = linkNote.split('#'),
+                  noteId       = linkParts[1];
+
+            $('#issue_notes').val('REPLY "#' + noteId + '":' + linkNoteFull + '\n\n--------------------\n\n');
+        });
+};
+
+/**
  * Document ready
  */
 $(function () {
@@ -788,7 +818,7 @@ $(function () {
     //     '#query_form, #tab-content-info, #content'
     // )
 
-    $('#update, #new_time_entry, #issue-form, .edit_time_entry, #quick-search, .controller-search')
+    $('#update, #new_time_entry, #issue-form, .edit_time_entry, #quick-search, .controller-search, #bulk_edit_form')
         .find('select')
         .each(function () {
             var elSelect = $(this);
@@ -841,8 +871,7 @@ $(function () {
             .select2('destroy')
             .select2({
                 width: 'resolve'
-            })
-        ;
+            });
     });
 
     $(document).on('select2:open', () => {

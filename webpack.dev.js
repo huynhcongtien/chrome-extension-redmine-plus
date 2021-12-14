@@ -12,7 +12,7 @@ module.exports = merge(common, {
     },
     plugins     : [
         new ChromeExtensionReloader({
-            port   : 35729,
+            port   : 35734,
             entries: {
                 contentScript: 'content',
                 background   : 'background'
