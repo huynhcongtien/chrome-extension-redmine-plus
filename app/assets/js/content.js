@@ -854,10 +854,14 @@ $(function () {
         window.location.href = window.location.origin + href;
     });
 
-    $('body').on('change', '#issue_tracker_id', function () {
-        const link = '/projects/beer/issues/update_form.js' + (redminePlus.noteId ? ('?id=' + redminePlus.noteId) : '');
-        redminePlus.updateIssueFrom(link);
-    });
+    $('body')
+        .on('change', '#issue_tracker_id', function () {
+            const link = '/projects/beer/issues/update_form.js' + (redminePlus.noteId ? ('?id=' + redminePlus.noteId) : '');
+            redminePlus.updateIssueFrom(link);
+        })
+        .on('click', 'input.hasDatepicker', function () {
+            $(this).parent().find('.ui-datepicker-trigger').trigger('click');
+        });
 
 
     //$('[name="datepicker"]').addClass('red-form-control');
